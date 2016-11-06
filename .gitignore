@@ -1,4 +1,4 @@
 /nbproject/private/
-/nbproject/private/
 composer.lock
 vendor/
+/src/Db.php

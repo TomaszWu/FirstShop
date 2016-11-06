@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dataset>
+    
+    <Products
+        id="1"
+        name="pralka"
+        description="nowy model turbo2000"
+        price="999,99"
+        stock="6"
+    />
+    
+    <Products
+        id="2"
+        name="TV"
+        description="Sharp Extra"
+        price="1999,99"
+        stock="7"
+    />
+    
+    <Products
+        id="3"
+        name="BMW"
+        description="nowy model turbo2000"
+        price="5999,99"
+        stock="1"
+    />
+    
+    
+    
+</dataset>
