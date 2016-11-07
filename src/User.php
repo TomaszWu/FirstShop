@@ -11,17 +11,12 @@ class User {
 
     public function __construct($id = -1, $name, $surname, $email, $password, $address) {
         $this->id = $id;
-        $this->setName = $name;
-        $this->setSurname = $surname;
-        $this->setEmail = $email;
-        $this->password = $password;
-        $this->address = $address;
+        $this->setName($name);
+        $this->setSurname($surname);
+        $this->setEmail($email);
+        $this->password($password);
+        $this->address($address);
     }
-    
-    
-    
-    
-    
 
     function getId() {
         return $this->id;
@@ -50,7 +45,6 @@ class User {
     function setId($id) {
         $this->id = $id;
     }
-
     function setName($name) {
         $this->name = $name;
     }
@@ -76,5 +70,9 @@ class User {
     function setAddress($address) {
         $this->address = $address;
     }
+    
+    
+    
+    
 
 }

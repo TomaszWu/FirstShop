@@ -60,30 +60,41 @@ class ProductTest extends PHPUnit_Extensions_Database_TestCase {
         $productToTest->buyAProduct(3);
     }
 
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testIfItIsPossibleToGiveTheWrongDescriptionToTheProduct() {
-        $productToTest = new Product;
-        $productToTest->setDescription('test');
-    }
+//    /**
+//     * @expectedException InvalidArgumentException
+//     */
+//    public function testIfItIsPossibleToGiveTheWrongDescriptionToTheProduct() {
+//        $productToTest = new Product;
+//        $productToTest->setDescription('');
+//    }
+//
+//    /**
+//     * @expectedException InvalidArgumentException
+//     */
+//    public function testIfItIsPossibleToGiveTheWrongNameToTheProduct() {
+//        $productToTest = new Product;
+//        $productToTest->setName('dsa');
+//    }
 
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testIfItIsPossibleToGiveTheWrongNameToTheProduct() {
+    public function testIfThrowExceptionWhenWhenTheWrongLinkIsPassed() {
         $productToTest = new Product;
+        $productToTest->addAPictureToTheDB(self::$connection, 'WRONG URL');
+    }
+
+    public function testIfForParticularPictureProperArrialWithPicturesIsReceived() {
+        $productToTest = new Product();
         $productToTest->setName('test');
-    }
-
-    public function testIfCreatedProductIsCorrect() {
-        $productToTest = new Product;
-        $productToTest->setPrice(10);
-//        $this->assertEquals(10, $productToTest->getCategory());
-//        $this->assertEquals(10, $productToTest->getDescription());
-//        $this->assertEquals(10, $productToTest->getName());
-        $this->assertEquals(10, $productToTest->getPrice());
-//        $this->assertEquals(10, $productToTest->getStock());
+        $productToTest->setDescription('test2');
+        $productToTest->setPrice(5);
+        $productToTest->setStock(10);
+        $productToTest->addAProductToTheDB(self::$connection);
+        $id = $productToTest->getId();
+        $test1 = $productToTest->addAPictureToTheDB(self::$connection, 'http://www.oleole.pl/foto/2/8992910192/820cc0e9f985b10407fef5709ae55b4f/8992910192_6.jpg');
+        $test2 = $productToTest->getAllPcituresOfTheItem(self::$connection, $id);
+        $this->assertInternalType('array', $productToTest->getAllPcituresOfTheItem(self::$connection, $id));
     }
 
 }
