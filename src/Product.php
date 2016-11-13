@@ -4,22 +4,74 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 class Product {
 
-    private $id;
+    private $productId;
     private $name;
     private $description;
     private $price;
     private $stock;
 
-    public function __construct($id = -1, $name = null, $description = null, $price = null, $stock = null) {
-        $this->id = $id;
+    public function __construct($productId = -1, $name = null, $description = null, $price = null, $stock = null) {
+        $this->productId = $productId;
         $this->setName($name);
         $this->setDescription($description);
         $this->setPrice($price);
         $this->setStock($stock);
     }
+    
+//    public function addTheItemToTheBasket($userId, $quantity) {
+////            var_dump($this->userId);
+//        $query = "INSERT INTO Orders (user_id, order_status)
+//                    VALUES ('$userId', '1')";
+//        if ($connection->query($query)) {
+//            $this->id = $connection->insert_id;
+//            $orderId = $this->id;
+//            echo $orderId;
+//            $productPrice = $this->getPrice();
+//            echo $productPrice;
+//            $productId = $this->getProductId();
+//            echo $productId;
+//            $query = "INSERT INTO orders_products (product_id, order_id, product_price, product_quantity) VALUES ('$productId', '$orderId', '$productPrice', '$quantity')";
+//            if ($connection->query($query)) {
+//                return true;
+//            } else {
+//                return false;
+//            }
+//        } else {
+//            return false;
+//        }
+//    }
+    
+    public static function confirmTheBasket(mysqli $connection, $basket) {
+        foreach($basket as $product){
+//            $productsPriceFromDB = new Product();
+            $productsPriceFromDB = Product::loadProductFromDb($connection, $product['itemId']);
+            $priceToConfirm = $productsPriceFromDB->getPrice();
+            $quantityToConfirm = $productsPriceFromDB->getStock();
+            var_dump($priceToConfirm);
+            var_dump($product['itemPrice']);
+            
+            if($priceToConfirm > $product['itemPrice'] && $quantityToConfirm > $product['itemQuantity']){
+                echo 'tak';
+            } else {
+                echo 'nie';
+            }
+        }
+    }
+    
+    public function changeProductPrice(mysqli $connection, $newPrice){
+        $productId = $this->productId;
+        $query = "UPDATE Products SET price = '$newPrice' WHERE id = '$this->productId'";
+         if ($connection->query($query)) {
+                return true;
+            } else {
+                return false;
+            }
+    }
+    
+    
 
     public function addAProductToTheDB(mysqli $connection) {
-        if ($this->id == -1) {
+        if ($this->itemId == -1) {
             $query = "INSERT INTO Products (name, description, price, stock)
                     VALUES ( '$this->name', '$this->description', '$this->price', '$this->stock'
                     )";
@@ -52,7 +104,7 @@ class Product {
         }
     }
 
-    public function getAllPcituresOfTheItem(mysqli $connection, $item_id) {
+    public static function getAllPcituresOfTheItem(mysqli $connection, $item_id) {
         $query = "SELECT Pictures.Picture_link FROM Products JOIN Pictures ON Products.id = Pictures.Product_id WHERE Products.id = '$item_id'";
         $pictures = [];
         $result = $connection->query($query);
@@ -63,9 +115,26 @@ class Product {
             return $pictures;
         }
     }
+    public static function loadProductFromDb(mysqli $connection, $id) {
+        $query = "SELECT * FROM Products WHERE id = '$id'";
+        $products = [];
+        $result = $connection->query($query);
+        if ($result == true && $result->num_rows > 0) {
+            foreach ($result as $row) {
+                $products = new Product();
+                $products->productId = $row['id'];
+                $products->name = $row['name'];
+                $products->description = $row['description'];
+                $products->price = $row['price'];
+                $products->stock = $row['stock'];
+            }
+            return $products;
+        }
+    }
+    
 
-    function getId() {
-        return $this->id;
+    function getProductId() {
+        return $this->productId;
     }
 
     function getName() {
@@ -84,8 +153,8 @@ class Product {
         return $this->stock;
     }
 
-    function setId($id) {
-        $this->id = $id;
+    function setProductId($productId) {
+        $this->productId = $productId;
     }
 
     function setName($name) {
@@ -136,6 +205,33 @@ class Product {
     }
 
 
+    
+    
+     function rewind() {
+        var_dump(__METHOD__);
+        $this->position = 0;
+    }
+
+    function current() {
+        var_dump(__METHOD__);
+        return $this->users[$this->position];
+    }
+
+    function key() {
+        var_dump(__METHOD__);
+        return $this->position;
+    }
+
+    function next() {
+        var_dump(__METHOD__);
+        ++$this->position;
+    }
+
+    function valid() {
+        var_dump(__METHOD__);
+        return isset($this->users[$this->position]);
+    }
+    
 }
 
 /*
