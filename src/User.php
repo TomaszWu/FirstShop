@@ -1,26 +1,43 @@
 <?php
+
 require_once __DIR__ . '/../vendor/autoload.php';
-class User {
+
+class User implements JsonSerializable {
 
     private $userId;
     private $name;
     private $surname;
     private $email;
-    private $password;
+    private $hashedPassword;
     private $address;
     private $basket;
 
-    public function __construct($userId = -1, $name = null, $surname = null, $email = null, $password = null, $address = null, $basket = null) {
+    public function __construct($userId = -1, $name = null, $surname = null, $email = null, $hashedPassword = null, $address = null, $basket = null) {
         $this->userId = $userId;
         $this->setName($name);
         $this->setSurname($surname);
         $this->setEmail($email);
-        $this->setPassword($password);
-        $this->setAddress($address);
+        $this->setHashedPassword($hashedPassword);
+        $this->address = ($address);
         $this->basket = [];
     }
-//
     
+    public function jsonSerialize() {
+        //funkcja zwraca nam dane z obiketu do json_encode
+        return [
+            'userId' => $this->userId,
+            'setName' => $this->name,
+            'setSurname' => $this->Surname,
+            'setEmail' => $this->email,
+            'description' => $this->description,
+            'setHashedPassword' => $this->hashedPassword,
+            'address' => $this->address,
+            'basket' => $this->basket
+        ];
+    }
+
+//
+
     public function loadTheBasket(mysqli $connection) {
         $userId = $this->userId;
         var_dump($userId);
@@ -38,22 +55,63 @@ class User {
         return $basket;
     }
     
-    public function addTheItemToTheBasket($itemId, $price, $quantity) {
-    $this->basket[] = ['itemId' => $itemId,
-        'itemQuantity' => $quantity,
-        'itemPrice' => $price];    
+    static public function login(mysqli $connection, $email, $password) {
+        $user = self::loadByEmail($connection, $email);
+        if($user && password_verify($password, $user->hashedPassword)){
+            return $user;
+        } else {
+            return false;
+        }
+    }
     
-    return $this->basket;
-}
+    static public function loadByEmail(mysqli $connection, $email){
+        $query = "SELECT * FROM Users WHERE email = '".$connection->real_escape_string($email)."'";
+        
+        $res = $connection->query($query);
+        if($res && $res->num_rows == 1){
+            $row = $res->fetch_assoc();
+            $user = new User();
+            $user->setUserId($row['id']);
+            $user->setName($row['name']);
+            $user->setSurname($row['surname']);
+            $user->setEmail($row['email']);
+            $user->hashedPassword = $row['hashed_password'];
+            $user->setAddress($row['address']);
+            
+            
+            return $user;
+        }
+        return null;
+    }
+
+    public function addTheItemToTheBasket($itemId, $price = null, $quantity = null) {
+        if (!isset($_COOKIE['basket' . $this->userId])) {
+            $this->basket[] = ['itemId' => $itemId,
+                'itemQuantity' => $quantity,
+                'itemPrice' => $price];
+            setcookie('basket' . $this->userId, serialize($this->basket), time() + 900);
+        } else {
+            $previousBasket = unserialize($_COOKIE['basket' . $this->userId]);
+            $previousBasket[] = ['itemId' => $itemId,
+                'itemQuantity' => $quantity,
+                'itemPrice' => $price];
+            $this->basket = $previousBasket;
+            setcookie('basket' . $this->userId, serialize($this->basket), time() + 900);
+        }
+
+        return $this->basket;
+    }
     
-    
+    public function addCookiesToTheBasket($cookie) {
+        $this->basket[] = $cookie;
+    }
 
     public function saveTheUserToDB(mysqli $connection) {
-        if ($this->id == -1) {
-            $query = "INSERT INTO Users (name, surname, email, password, address) 
-                    VALUES ('$this->name', '$this->surname', '$this->email', '$this->password', '$this->address') ";
+        if ($this->userId == -1) {
+            $query = "INSERT INTO Users (name, surname, email, hashed_password, address) 
+                    VALUES ('$this->name', '$this->surname', '$this->email', '$this->hashedPassword', '$this->address') ";
             if ($connection->query($query)) {
-                $this->id = $connection->insert_id; // ostatni dodoany!!
+                $this->userId = $connection->insert_id; // ostatni dodoany!!
                 return true;
             } else {
                 return false;
@@ -62,7 +120,7 @@ class User {
             // modyfikacja obiektu, na wypadek, gdyby istniał już dany email
             $query = "UPDATE Users SET 
                     name = '$this->name', email = '$this->email', hashed_password = '$this->hashedPassword'
-                    WHERE id = $this->id";
+                    WHERE id = $this->userId";
 
             if ($connection->query($query)) {
                 return true;
@@ -112,7 +170,7 @@ class User {
                 $dbUser->name = $row['name'];
                 $dbUser->surname = $row['surname'];
                 $dbUser->email = $row['email'];
-                $dbUser->password = $row['password'];
+                $dbUser->hashedPassword = $row['hashed_password'];
                 $dbUser->address = $row['address'];
                 $usersList[] = $dbUser;
             }
@@ -120,21 +178,20 @@ class User {
         return $usersList;
     }
 
-    public function login(mysqli $connection, $email, $password) {
-//        $email = $connection->real_escape_string($mail); tak też można
-        $query = "SELECT * FROM Users WHERE email ='" . mysqli_real_escape_string($connection, $email) . "'";
-        $res = $connection->query($query);
-        if ($res->num_rows == 1) {
-            $row = $res->fetch_assoc();
-            if (password_verify($password, $row['password'])) {
-                return $row['id'];
-            } else {
-                return false;
-            }
-        }
-        return false;
-    }
-
+//    static public function login(mysqli $connection, $email, $password) {
+////        $email = $connection->real_escape_string($mail); tak też można
+//        $query = "SELECT * FROM Users WHERE email ='" . mysqli_real_escape_string($connection, $email) . "'";
+//        $res = $connection->query($query);
+//        if ($res->num_rows == 1) {
+//            $row = $res->fetch_assoc();
+//            if (password_verify($password, $row['hashed_password'])) {
+//                return $row['id'];
+//            } else {
+//                return false;
+//            }
+//        }
+//        return false;
+//    }
 
     function getUserId() {
         return $this->userId;
@@ -156,8 +213,9 @@ class User {
         return $this->email;
     }
 
-    function getPassword() {
-        return $this->password;
+    function getHashedPassword() {
+        return $this->hashedPassword;
+        
     }
 
     function getAddress() {
@@ -166,6 +224,10 @@ class User {
 
     function setUserId($userId) {
         $this->userId = $userId;
+    }
+    
+    function setBasket($basket) {
+        $this->basket = $basket;
     }
 
     function setName($name) {
@@ -193,16 +255,23 @@ class User {
 //        }
 //        return $this; // gdyby toś chciał wywołać kilka seterów ?? oO
 //    }
-
-    public function setPassword($password, $hashPassword = true) {
+    public function setHashedPassword($password, $hashPassword = true) {
         if (is_string($password)) {
             if ($hashPassword) {
-                $this->password = password_hash($password, PASSWORD_DEFAULT);
+                $this->hashedPassword = password_hash($password, PASSWORD_DEFAULT);
             } else {
-                $this->password = $password;
+                $this->hashedPassword = $password;
             }
         }
     }
+
+
+//    public function setHashedPassword($password) {
+//        if (is_string($password) && strlen(trim($password)) > 5) {
+//            $this->hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+//        }
+//        return $this; // gdyby toś chciał wywołać kilka seterów ?? oO
+//    }
 
     public static function getUserByEmail(mysqli $connection, $email) {
         //        $email = $connection->real_escape_string($mail); tak też można 

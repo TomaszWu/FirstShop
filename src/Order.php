@@ -33,7 +33,7 @@ class Order {
                     $productId = $product['itemId'];
                     $query = "INSERT INTO orders_products (product_id, order_id, product_price, product_quantity) VALUES ('$productId', '$orderId', '$productPrice', '$productQuantity')";
                     if ($connection->query($query)) {
-                        echo 'tak';
+                        echo '<br>tak2';
                     } else {
                         return false;
                     }
