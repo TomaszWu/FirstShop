@@ -14,9 +14,7 @@ class Product implements JsonSerializable {
     public $stock;
     public $pictures;
 
-    
-    public function __construct($productId = -1, $name = null, $description = null, 
-            $categoryId = null, $price = null, $orderedQuantity = null, $keyInTheBasket = null, $stock = null) {
+    public function __construct($productId = -1, $name = null, $description = null, $categoryId = null, $price = null, $orderedQuantity = null, $keyInTheBasket = null, $stock = null) {
         $this->productId = $productId;
         $this->setName($name);
         $this->setDescription($description);
@@ -28,7 +26,7 @@ class Product implements JsonSerializable {
         $this->pictures = [];
 //        $this->position = 0;
     }
-    
+
     public function jsonSerialize() {
         return [
             'productId' => $this->productId,
@@ -41,6 +39,28 @@ class Product implements JsonSerializable {
             'stock' => $this->stock,
             'pictures' => $this->pictures,
         ];
+    }
+
+    public function addTheItemInTheDB(mysqli $connection, $userId, $status) {
+        if ($this->orderId == -1) {
+            $userId = $this->getUserId();
+            $query = "INSERT INTO Orders (user_id, order_status)
+                    VALUES ('$userId', '$status')";
+            if ($connection->query($query)) {
+                $this->orderId = $connection->insert_id;
+                $orderId = $this->getOrderId();
+
+                $query = "INSERT INTO orders_products (product_id, order_id, product_quantity) VALUES ('$this->getId()', '$orderId', '1')";
+                if ($connection->query($query)) {
+                    echo '<br>tak2';
+                } else {
+                    return false;
+                }
+                return true;
+            } else {
+                return false;
+            }
+        }
     }
 
 //    public function addTheItemToTheBasket($userId, $quantity) {
@@ -142,13 +162,13 @@ class Product implements JsonSerializable {
     public static function loadProductFromDb(mysqli $connection, $id = null, $categoryId = null) {
         if (is_null($id) && is_null($categoryId)) {
             $query = "SELECT * FROM Products LEFT JOIN Pictures ON Products.id = Pictures.Product_id";
-        } elseif($categoryId) {
+        } elseif ($categoryId) {
             $query = "SELECT * FROM Products LEFT JOIN Pictures ON Products.id = Pictures.Product_id WHERE category_id = '$categoryId'";
         } else {
             $query = "SELECT * FROM Products LEFT JOIN Pictures ON Products.id = Pictures.Product_id WHERE Products.id = '$id'";
         }
-        
-        
+
+
         $productsWithoutPictures = [];
         $productsWithPictures = [];
         $result = $connection->query($query);
@@ -172,16 +192,14 @@ class Product implements JsonSerializable {
                 $product->setPictures($test);
                 $productsWithPictures[] = ($product);
             }
-            
         }
         return $productsWithPictures;
     }
-    
-    
+
     public static function loadProductFromDbJson(mysqli $connection, $id = null, $categoryId = null) {
         if (is_null($id) && is_null($categoryId)) {
             $query = "SELECT * FROM Products LEFT JOIN Pictures ON Products.id = Pictures.Product_id";
-        } elseif($categoryId) {
+        } elseif ($categoryId) {
             $query = "SELECT * FROM Products LEFT JOIN Pictures ON Products.id = Pictures.Product_id WHERE category_id = '$categoryId'";
         } else {
             $query = "SELECT * FROM Products LEFT JOIN Pictures ON Products.id = Pictures.Product_id WHERE Products.id = '$id'";
@@ -210,7 +228,6 @@ class Product implements JsonSerializable {
                 $product->setPictures($pictures);
                 $productsWithPictures[] = ($product);
             }
-            
         }
         return $productsWithPictures;
     }
@@ -237,17 +254,16 @@ class Product implements JsonSerializable {
 //            return $products;
 //        }
 //    }
-    
-    
-    public function addAProductToTheBasket(mysqli $connection, $productId, $userId){
+
+
+    public function addAProductToTheBasket(mysqli $connection, $productId, $userId) {
         
     }
-
 
     function setPictures($pictures) {
         $this->pictures = $pictures;
     }
-    
+
     function setOrderedQuantity($orderedQuantity) {
         $this->orderedQuantity = $orderedQuantity;
     }
@@ -267,11 +283,11 @@ class Product implements JsonSerializable {
     function getDescription() {
         return $this->description;
     }
-    
+
     function getKeyInTheBasket() {
         return $this->getKeyInTheBasket;
     }
-    
+
     function getCategoryId() {
         return $this->categoryId;
     }
@@ -279,11 +295,11 @@ class Product implements JsonSerializable {
     function getOrderedQuantity() {
         return $this->orderedQuantity;
     }
-    
+
     function getStock() {
         return $this->stock;
     }
-    
+
     function getPictures() {
         return $this->pictures;
     }
@@ -291,11 +307,11 @@ class Product implements JsonSerializable {
     function setProductId($productId) {
         $this->productId = $productId;
     }
-    
+
     function setKeyInTheBasket($keyInTheBasket) {
         $this->keyInTheBasket = $keyInTheBasket;
     }
-    
+
     function setCategoryId($categoryId) {
         $this->categoryId = $categoryId;
     }
@@ -345,7 +361,6 @@ class Product implements JsonSerializable {
             throw new InvalidArgumentException('Liczba zamówionych produktów nie może być ujemna');
         }
     }
-    
 
     function rewind() {
         var_dump(__METHOD__);

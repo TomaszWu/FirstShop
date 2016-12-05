@@ -4,12 +4,13 @@ $(function () {
         type: 'GET',
         dataType: 'json',
         success: function (result) {
-            for (var i = 0; i < result[0].length; i++) {
-                var product = JSON.parse(result[0][i]);
-                var finalPrice = product.price * product.orderedQuantity;
-                var row = ('<tr class="singleProduct" id="' + product.keyInTheBasket + '"><th class="productName">'
-                        + product.name + '</th><th class="orderedQnt">\n\
-<input type="number" min="1" id="changeTheQnt" value="' + product.orderedQuantity + '">\n\
+            for (var i = 0; i < result.length; i++) {
+                var order = JSON.parse(result[i]);
+                console.log( order.products);
+                var finalPrice = order.products.price * order.products.quantity;
+                var row = ('<tr class="singleProduct" id="' + order.orderId + '"><th class="productName">'
+                        + order.products.product_name + '</th><th class="orderedQnt">\n\
+<input type="number" min="1" id="changeTheQnt" value="' + order.products.quantity + '">\n\
 </th><th  class="itemPrice">' + finalPrice + '</th><</tr>');
                 $('tbody').append(row);
 
@@ -43,7 +44,7 @@ $(function () {
             type: 'GET',
             dataType: 'json',
             success: function (result) {
-//                
+                
                 var idToCompare = $(el.target).parent().parent().attr('id');
                 console.log(idToCompare);
                 for (var i = 0; i < result[1].length; i++) {
