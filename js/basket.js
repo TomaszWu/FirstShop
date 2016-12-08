@@ -57,7 +57,7 @@ $(function () {
                             dataType: 'json'
                         })
                                 .done(function (result) {
-                            console.log(result['statusToConfirm']);
+                                    console.log(result['statusToConfirm']);
 
                                 })
                                 .fail(function () {
@@ -101,8 +101,19 @@ $(function () {
     });
     $(document).on('click', '.confirm', function (event) {
 
+        $.ajax({
+            url: 'api/basketManagment.php',
+            type: 'PUT',
+            data: {confirmTheBasket: 1},
+            dataType: 'json'
+        })
+                .done(function (result) {
+                    console.log(result['statusToConfirm']);
 
-
+                })
+                .fail(function () {
+                    console.log('Wystąpił błąd123');
+                });
 
     });
 
