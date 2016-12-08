@@ -118,28 +118,34 @@ class Product implements JsonSerializable {
             $query = "INSERT INTO Products (name, description, category_id, price, stock)
                     VALUES ( '$this->name', '$this->description', '$this->categoryId', '$this->price', '$this->stock'
                     )";
-            
         } else {
             $query = "UPDATE Products 
                     SET  name = '$this->name', description = '$this->description', "
                     . " category_id = '$this->categoryId', price = '$this->price', "
                     . " stock = '$this->stock'
                     WHERE id = '$this->productId'";
-            
         }
+        if ($connection->query($query)) {
+            $this->id = $connection->insert_id;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function buyAProduct(mysqli $connection, $quantity) {
+        
+        if ($this->stock - $quantity < 0) {
+            throw new InvalidArgumentException('Niestety, produkt nie jest dostępny w podanej ilości');
+        } else {
+            $this->stock = $this->stock - $quantity;
+            $query = "UPDATE Products SET stock = '$this->stock ' WHERE id = '$this->productId'";
             if ($connection->query($query)) {
                 $this->id = $connection->insert_id;
                 return true;
             } else {
                 return false;
             }
-    }
-
-    public function buyAProduct($quantity) {
-        if ($this->stock -= $quantity < 0) {
-            throw new InvalidArgumentException('Niestety, produkt nie jest dostępny w podanej ilości');
-        } else {
-            $this->stock -= $this->products['quantity'];
         }
     }
 
@@ -264,9 +270,6 @@ class Product implements JsonSerializable {
 //    }
 
 
-    public function addAProductToTheBasket(mysqli $connection, $productId, $userId) {
-        
-    }
 
     function setPictures($pictures) {
         $this->pictures = $pictures;

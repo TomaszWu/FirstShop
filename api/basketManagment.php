@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 } elseif ($_SERVER['REQUEST_METHOD'] == 'PUT') {
     //pobieramy przeslane dane
     parse_str(file_get_contents('php://input'), $put_vars);
-    if(isset($put_vars['orderId']) && isset($put_vars['newQnt'])){
+    if (isset($put_vars['orderId']) && isset($put_vars['newQnt'])) {
         $orderId = $put_vars['orderId'];
         $newQnt = $put_vars['newQnt'];
         $orderToChangeQnt = Order::loadOrderById($conn, $orderId);
@@ -27,17 +27,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 //        $product->setStock($currentStock - $productQuantity);
 //        $product->addAProductToTheDB($conn);
         $confirmation = ['statusToConfirm' => 'Ilość zmieniona'];
-        
-    } elseif (isset($put_vars['confirmTheBasket'])){
+    } elseif (isset($put_vars['confirmTheBasket'])) {
         $userId = unserialize($_SESSION['userId']);
-        $basket = Order::loadTheBasket($userId);
-        foreach($basket as $order){
-            $productId = $product['products']['product_id'];
-            $product = Product::loadProductFromDb($conn, $id);
-            $product->buyAProduct($product['products']['quantity']);
+        $basket = Order::loadTheBasket($conn, $userId);
+        foreach ($basket as $order) {
+            $singleItem = json_decode($order);
+            $productId = $singleItem->products->product_id;
+            $quantity = $singleItem->products->quantity;
+            $stock = $singleItem->products->stock;
+            $product = Product::loadProductFromDb($conn, $productId)[0];
+            $product->buyAProduct($conn, $quantity);
         }
         Order::confirmTheBasket($conn, $userId);
-    }$confirmation = ['statusToConfirm' => 'Zamowieie zlozone'];
+        $confirmation = ['statusToConfirm' => 'Zamowieie zlozone'];
+    } 
+    
     echo json_encode($confirmation);
 } elseif ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
     parse_str(file_get_contents("php://input"), $del_vars);
