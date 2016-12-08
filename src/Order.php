@@ -27,10 +27,6 @@ class Order implements JsonSerializable {
         ];
     }
 
-    public static function createAnOrder(mysqli $connection, $userId) {
-        $query = "";
-    }
-
     public function changeTheQuantity(mysqli $connection, $quantitiy) {
         $query = "UPDATE Orders SET Product_quantity = '$quantitiy' WHERE id ='$this->orderId'";
         if ($connection->query($query)) {
@@ -47,9 +43,6 @@ class Order implements JsonSerializable {
             if ($connection->query($query)) {
                 $this->orderId = $connection->insert_id;
                 $orderId = $this->getOrderId();
-
-
-
                 $query = "INSERT INTO Orders_products (product_id, order_id) VALUES ('$productId', '$this->orderId')";
                 if ($connection->query($query)) {
                     return true;
@@ -129,6 +122,30 @@ class Order implements JsonSerializable {
 //            }
 //        }
 //    }
+
+    public static function confirmTheBasket(mysqli $connection, $userId) {
+        $result = $connection->query("SELECT * FROM Orders where order_status = 0 and user_id = '$userId' LIMIT 1");
+        if ($result && $result->num_rows > 0) {
+            foreach ($result as $row) {
+                $orderIdForTheWholeBasket = $row['id'];
+            }
+            $result = $connection->query("UPDATE Orders_products
+JOIN Orders ON Orders.id=Orders_products.order_id
+SET Orders_products.order_id = '$orderIdForTheWholeBasket'
+WHERE Orders.user_id = '$userId' AND Orders.order_status = 0");
+            if ($result) {
+                $result = $connection->query("UPDATE Orders
+JOIN Orders_products ON Orders.id=Orders_products.order_id
+SET Orders.order_status = 1
+WHERE Orders.user_id = '$userId' AND Orders_products.order_id = '$orderIdForTheWholeBasket'");
+                if ($result) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
+    }
 
     public static function loadTheBasket(mysqli $connection, $userId) {
         $query = "SELECT Orders.user_id, Orders.order_status, Orders.id as order_id, 

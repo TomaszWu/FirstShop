@@ -139,7 +139,7 @@ class Product implements JsonSerializable {
         if ($this->stock -= $quantity < 0) {
             throw new InvalidArgumentException('Niestety, produkt nie jest dostępny w podanej ilości');
         } else {
-            $this->stock -= $quantity;
+            $this->stock -= $this->products['quantity'];
         }
     }
 

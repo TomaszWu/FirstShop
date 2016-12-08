@@ -27,11 +27,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 //        $product->setStock($currentStock - $productQuantity);
 //        $product->addAProductToTheDB($conn);
         $confirmation = ['statusToConfirm' => 'Ilość zmieniona'];
-        echo json_encode($confirmation);
-    } elseif (isset($put_vars['confirmTheBasket'])){
         
-    }
-    
+    } elseif (isset($put_vars['confirmTheBasket'])){
+        $userId = unserialize($_SESSION['userId']);
+        $basket = Order::loadTheBasket($userId);
+        foreach($basket as $order){
+            $productId = $product['products']['product_id'];
+            $product = Product::loadProductFromDb($conn, $id);
+            $product->buyAProduct($product['products']['quantity']);
+        }
+        Order::confirmTheBasket($conn, $userId);
+    }$confirmation = ['statusToConfirm' => 'Zamowieie zlozone'];
+    echo json_encode($confirmation);
 } elseif ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
     parse_str(file_get_contents("php://input"), $del_vars);
     if (isset($del_vars['idToDelete'])) {
