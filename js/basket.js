@@ -50,10 +50,26 @@ $(function () {
                         var newQnt = $(el.target).val();
                         var newPrice = newQnt * price;
                         $(el.target).parent().next().html(newPrice);
+                        $.ajax({
+                            url: 'api/basketManagment.php',
+                            type: 'PUT',
+                            data: {orderId: itemToCompare.orderId, newQnt: newQnt},
+                            dataType: 'json'
+                        })
+                                .done(function (result) {
+                            console.log(result['statusToConfirm']);
+
+                                })
+                                .fail(function () {
+                                    console.log('Wystąpił błąd123');
+                                });
+
+
+
                     }
                     ;
                 }
-               finalPrice();
+                finalPrice();
 
             }
         })
@@ -81,13 +97,13 @@ $(function () {
                 .fail(function () {
                     console.log('Wystąpił błąd2');
                 });
-                
+
     });
     $(document).on('click', '.confirm', function (event) {
-    
-    
-        
-    
+
+
+
+
     });
 
 
