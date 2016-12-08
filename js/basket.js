@@ -6,12 +6,12 @@ $(function () {
         success: function (result) {
             for (var i = 0; i < result.length; i++) {
                 var order = JSON.parse(result[i]);
-                console.log(order.products);
+                console.log(order);
                 var finalPrice = order.products.price * order.products.quantity;
-                var row = ('<tr class="singleProduct" id="' + order.orderId + '"><th class="productName">'
+                var row = ('<tr class="singleProduct" data-id="' + order.orderId + '"><th class="productName">'
                         + order.products.product_name + '</th><th class="orderedQnt">\n\
 <input type="number" min="1" id="changeTheQnt" value="' + order.products.quantity + '">\n\
-</th><th  class="itemPrice">' + finalPrice + '</th><</tr>');
+</th><th  class="itemPrice">' + finalPrice + '</th><th><a href class="delete">Usuń z koszyka</th></tr>');
                 $('tbody').append(row);
 
             }
@@ -45,17 +45,15 @@ $(function () {
             dataType: 'json',
             success: function (result) {
 
-                var idToCompare = $(el.target).parent().parent().attr('id');
-                console.log(idToCompare);
+                var idToCompare = $(el.target).parent().parent().attr('data-id');
                 for (var i = 0; i < result.length; i++) {
                     var itemToCompare = JSON.parse(result[i]);
-                    if (itemToCompare.itemId == idToCompare) {
-                        var price = itemToCompare.itemPrice;
+                    if (itemToCompare.orderId == idToCompare) {
+                        $(el.target).attr('max', itemToCompare.products.stock);
+                        var price = itemToCompare.products.price;
                         var newQnt = $(el.target).val();
-                        var newPrice = intval(newQnt) * intval(price);
+                        var newPrice = newQnt * price;
                         $(el.target).parent().next().html(newPrice);
-                        console.log(newPrice);
-
                     }
                     ;
                 }
@@ -65,7 +63,6 @@ $(function () {
                     var priceToConvert = parseFloat(thsWithPrice[j].innerHTML);
                     changedAmount += priceToConvert;
                     if (j == (thsWithPrice.length - 2)) {
-                        console.log(changedAmount);
                         $('#finalPrice').html(changedAmount);
                     }
                 }
@@ -73,6 +70,31 @@ $(function () {
             }
 
 
+
+
         })
+    });
+
+    $(document).on('click', '.delete', function (event) {
+        event.preventDefault();
+        event.stopImmediatePropagation();
+
+        var idToDelete = $(this).parent().parent().attr('data-id');
+        var thtoDelete = $(this).parent().parent().remove();
+        $.ajax({
+            url: 'api/basketManagment.php',
+            type: 'DELETE',
+            data: {idToDelete: idToDelete},
+            dataType: 'json'
+        })
+
+                // tutaj to nie zwraca JSONa. Analogiczny zapis w POST działał. 
+
+                .done(function (result) {
+                    console.log(result['statusToConfirm']);
+                })
+                .fail(function () {
+                    console.log('Wystąpił błąd2');
+                });
     });
 });
