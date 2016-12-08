@@ -17,5 +17,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     //pobieramy przeslane dane
     parse_str(file_get_contents('php://input'), $put_vars);
 } elseif ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
-    
+    parse_str(file_get_contents("php://input"), $del_vars);
+    if (isset($del_vars['idToDelete'])) {
+        $idToDelete = $del_vars['idToDelete'];
+        Order::deleteTheItemFromBasket($conn, $idToDelete);
+    }
+    $confirmationDelete = ['statusToConfirm' => 'Produkt skasowany'];
+    echo json_encode($confirmationDelete);
 }

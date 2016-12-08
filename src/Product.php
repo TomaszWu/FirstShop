@@ -118,13 +118,21 @@ class Product implements JsonSerializable {
             $query = "INSERT INTO Products (name, description, category_id, price, stock)
                     VALUES ( '$this->name', '$this->description', '$this->categoryId', '$this->price', '$this->stock'
                     )";
+            
+        } else {
+            $query = "UPDATE Products 
+                    SET  name = '$this->name', description = '$this->description', "
+                    . " category_id = '$this->categoryId', price = '$this->price', "
+                    . " stock = '$this->stock'
+                    WHERE id = '$this->productId'";
+            
+        }
             if ($connection->query($query)) {
                 $this->id = $connection->insert_id;
                 return true;
             } else {
                 return false;
             }
-        }
     }
 
     public function buyAProduct($quantity) {

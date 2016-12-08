@@ -6,7 +6,7 @@ $(function () {
         success: function (result) {
             for (var i = 0; i < result.length; i++) {
                 var order = JSON.parse(result[i]);
-                console.log( order.products);
+                console.log(order.products);
                 var finalPrice = order.products.price * order.products.quantity;
                 var row = ('<tr class="singleProduct" id="' + order.orderId + '"><th class="productName">'
                         + order.products.product_name + '</th><th class="orderedQnt">\n\
@@ -44,17 +44,17 @@ $(function () {
             type: 'GET',
             dataType: 'json',
             success: function (result) {
-                
+
                 var idToCompare = $(el.target).parent().parent().attr('id');
                 console.log(idToCompare);
-                for (var i = 0; i < result[1].length; i++) {
-                    var itemToCompare = JSON.parse(result[1][i]);
+                for (var i = 0; i < result.length; i++) {
+                    var itemToCompare = JSON.parse(result[i]);
                     if (itemToCompare.itemId == idToCompare) {
                         var price = itemToCompare.itemPrice;
                         var newQnt = $(el.target).val();
-                        var newPrice = newQnt * price;
+                        var newPrice = intval(newQnt) * intval(price);
                         $(el.target).parent().next().html(newPrice);
-
+                        console.log(newPrice);
 
                     }
                     ;
@@ -64,12 +64,12 @@ $(function () {
                 for (var j = 0; j < thsWithPrice.length - 1; j++) {
                     var priceToConvert = parseFloat(thsWithPrice[j].innerHTML);
                     changedAmount += priceToConvert;
-                    if(j == (thsWithPrice.length - 2)){
+                    if (j == (thsWithPrice.length - 2)) {
                         console.log(changedAmount);
                         $('#finalPrice').html(changedAmount);
                     }
                 }
-                
+
             }
 
 

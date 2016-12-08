@@ -16,6 +16,7 @@
                                 <th>Product</th>
                                 <th>Quantity</th>
                                 <th>Price</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody id="productList">
@@ -23,12 +24,9 @@
                         </tbody>
                     </table>
                 </div>
-
-
             </div>
             <div class="col-sm-2"></div>
         </div>
-
 
     </body>
 </html>
