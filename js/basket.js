@@ -22,21 +22,17 @@ $(function () {
                 totalAmount += priceToConvert;
             }
 
-            var rowWithPrice = ('<tr><th></th><th> \n\
-            </th><th  class="itemPrice" id="finalPrice">Cena: ' + totalAmount + '</th><</tr>');
+            var rowWithPrice = ('<tr id="summary"><th></th><th> \n\
+            </th><th  class="itemPrice" id="finalPrice">Cena: ' + totalAmount + '</th><th></th></tr>');
             $('tbody').append(rowWithPrice);
-
+            var confirmBtn = $('<button>').addClass('confirm btn btn-primary').html('Zamawiam!');
+            $('#summary th:last-child').append(confirmBtn);
         },
         error: function () {
             console.log('Wystąpił błąd');
         }
     });
 
-    $(document).on('click', 'th.itemPrice', function (event) {
-        console.log('tak');
-        var test = $('itemPrice');
-        console.log(test);
-    });
 
     $(document).on('click', '#changeTheQnt', function (el) {
         $.ajax({
@@ -57,21 +53,9 @@ $(function () {
                     }
                     ;
                 }
-                var changedAmount = 0;
-                var thsWithPrice = $('th.itemPrice');
-                for (var j = 0; j < thsWithPrice.length - 1; j++) {
-                    var priceToConvert = parseFloat(thsWithPrice[j].innerHTML);
-                    changedAmount += priceToConvert;
-                    if (j == (thsWithPrice.length - 2)) {
-                        $('#finalPrice').html(changedAmount);
-                    }
-                }
+               finalPrice();
 
             }
-
-
-
-
         })
     });
 
@@ -81,6 +65,7 @@ $(function () {
 
         var idToDelete = $(this).parent().parent().attr('data-id');
         var thtoDelete = $(this).parent().parent().remove();
+        finalPrice();
         $.ajax({
             url: 'api/basketManagment.php',
             type: 'DELETE',
@@ -96,5 +81,25 @@ $(function () {
                 .fail(function () {
                     console.log('Wystąpił błąd2');
                 });
+                
     });
+    $(document).on('click', '.confirm', function (event) {
+    
+    
+        
+    
+    });
+
+
+    function finalPrice() {
+        var changedAmount = 0;
+        var thsWithPrice = $('th.itemPrice');
+        for (var j = 0; j < thsWithPrice.length - 1; j++) {
+            var priceToConvert = parseFloat(thsWithPrice[j].innerHTML);
+            changedAmount += priceToConvert;
+            if (j == (thsWithPrice.length - 2)) {
+                $('#finalPrice').html(changedAmount);
+            }
+        }
+    }
 });
