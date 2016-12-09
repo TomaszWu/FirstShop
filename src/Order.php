@@ -31,7 +31,7 @@ class Order implements JsonSerializable {
     }
 
     public function changeTheQuantity(mysqli $connection, $quantitiy) {
-        $query = "UPDATE Orders SET product_quantity = '$quantitiy' WHERE id ='$this->orderId'";
+        $query = "UPDATE Orders SET product_quantity = '$quantitiy' WHERE id ='$this->id'";
         if ($connection->query($query)) {
             return true;
         } else {
@@ -149,19 +149,18 @@ WHERE Orders.user_id = '$userId' AND Orders.order_status = 0 AND Orders.id = '$s
         return $basket;
     }
 
-    static public function loadOrderByOrderId(mysqli $connection, $orderId) {
+    static public function loadOrderById(mysqli $connection, $orderId) {
         $query = "SELECT Orders.user_id, Orders.order_status, Orders.order_id, Orders.id,
             Products.price as product_price, Orders.product_quantity, 
             Products.id as product_id, Products.stock, Products.name as product_name FROM Orders
                 JOIN Orders_products ON Orders.id = Orders_products.order_id
                 JOIN Products ON Products.id = Orders_products.product_id
                  WHERE Orders.id = '" . $connection->real_escape_string($orderId) . "'";
-        $loadedOrders = [];
         $res = $connection->query($query);
         if ($res == true && $res->num_rows > 0) {
-            foreach ($res as $row) {
+                $row = $res->fetch_assoc();
                 $loadedOrder = new Order();
-                 $loadedOrder->idd = $row['id'];
+                $loadedOrder->id = $row['id'];
                 $loadedOrder->userId = $row['user_id'];
                 $loadedOrder->status = $row['order_status'];
                 $loadedOrder->orderId = $row['order_id'];
@@ -170,11 +169,9 @@ WHERE Orders.user_id = '$userId' AND Orders.order_status = 0 AND Orders.id = '$s
                 $loadedOrder->products['product_id'] = $row['product_id'];
                 $loadedOrder->products['product_name'] = $row['product_name'];
                 $loadedOrder->products['stock'] = $row['stock'];
-
-                $loadedOrders[] = $loadedOrder;
-            }
+                
         }
-        return $loadedOrders;
+       return $loadedOrder;
     }
 
     static public function loadOrderByUserId(mysqli $connection, $orderId) {
@@ -234,6 +231,7 @@ WHERE Orders.user_id = '$userId' AND Orders.order_status = 0 AND Orders.id = '$s
     function setStatus($status) {
         $this->status = $status;
     }
+
     function setOrderId($orderId) {
         $this->orderId = $orderId;
     }

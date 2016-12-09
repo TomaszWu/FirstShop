@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $newQnt = $put_vars['newQnt'];
         $orderToChangeQnt = Order::loadOrderById($conn, $orderId);
         $orderToChangeQnt->changeTheQuantity($conn, $newQnt);
-//        $confirmation = ['statusToConfirm' => 'Ilość zmieniona'];
+        $confirmation = ['statusToConfirm' => 'Ilość zmieniona'];
     } elseif (isset($put_vars['confirmTheBasket'])) {
         $userId = unserialize($_SESSION['userId']);
         $basket = Order::loadTheBasket($conn, $userId);
