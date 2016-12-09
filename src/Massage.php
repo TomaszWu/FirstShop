@@ -3,12 +3,14 @@
 class Massage {
 
     private $id;
+    private $title;
     private $massage;
     private $user_id;
 
-    public function __construct($id = -1, $massage = null, $user_id = null) {
+    public function __construct($id = -1, $title = null, $massage = null, $user_id = null) {
         $this->id = $id;
         $this->setMassage($massage);
+        $this->setTitle($title);
         $this->setUser_id($user_id);
     }
 
@@ -49,6 +51,9 @@ class Massage {
         return $this->id;
     }
 
+    function getTitle() {
+        return $this->title;
+    }
     function getText() {
         return $this->text;
     }
@@ -57,6 +62,9 @@ class Massage {
         return $this->user_Id;
     }
 
+    function setTitle($title) {
+        $this->title = $title;
+    }
     function setMassage($massage) {
         $this->massage = $massage;
     }

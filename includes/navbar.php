@@ -28,14 +28,17 @@
                         <li><a href="register.php"><span class="glyphicon glyphicon-envelope"></span> Wiadomości</a></li>
                         <?php } 
                         if (isset($_SESSION['userId'])) { ?>
-                        <li><a href="register.php"><span class="glyphicon glyphicon-shopping-cart"></span> Koszyk</a></li>
+                        <li><a href="basket.php"><span class="glyphicon glyphicon-shopping-cart"></span> Koszyk</a></li>
+                        <?php } 
+                        if (isset($_SESSION['userId'])) { ?>
+                        <li><a href="orders.php"><span class="glyphicon glyphicon-eye-open"></span> Zamówienia</a></li>
                         <?php } 
                         if (!isset($_SESSION['userId'])) { ?>
                         <li><a href="register.php"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
                         <?php 
                         }
                         if (!isset($_SESSION['userId'])) { ?>
-                        <li><a href="login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                        <li><a href="login.php"><span class="glyphicon glyphicon-log-isn"></span> Login</a></li>
                         <?php } 
                          if (isset($_SESSION['userId'])) { ?>
                         <li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>

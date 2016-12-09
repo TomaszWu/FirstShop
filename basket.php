@@ -4,8 +4,16 @@
         <title>Books Shelf</title>
         <?php include('includes/header.php') ?>
         <script src="js/basket.js"></script>
+        <style>
+        body { 
+            padding-top: 65px; 
+        }
+
+
+    </style>
     </head>
     <body>
+        <?php include('includes/navbarOutsideTheMainPage.php'); ?>
         <div class="row">
             <div class="col-sm-2"></div>
             <div class="col-sm-8">
