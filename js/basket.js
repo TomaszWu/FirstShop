@@ -25,8 +25,25 @@ $(function () {
             var rowWithPrice = ('<tr id="summary"><th></th><th> \n\
             </th><th  class="itemPrice" id="finalPrice">Cena: ' + totalAmount + '</th><th></th></tr>');
             $('tbody').append(rowWithPrice);
-            var confirmBtn = $('<button>').addClass('confirm btn btn-primary').html('Zamawiam!');
+            var confirmBtn = $('<button>').addClass('confirm btn btn-primary btn btn-info btn-lg').html('Zamawiam!').attr('data-toggle', 'modal').attr('data-target', '#myModal');
             $('#summary th:last-child').append(confirmBtn);
+
+
+            var orderId = result['orderId'];
+            var modalDiv = $('<div>').addClass('modal fade').attr('id', 'myModal').attr('role', 'dialog');
+            var modalDialogDiv = $('<div>').addClass('modal-dialog modal-lg');
+            var modalContentDiv = $('<div>').addClass('modal-content');
+            var modalHeaderDiv = $('<div>').addClass('modal-header');
+            var h4WithTitle = $('<h4>').addClass('modal-title').html('Zamówienie zostało złożone');
+            var modalBodyDiv = $('<div>').addClass('modal-body');
+            var pWithInfo = $('<p>').html('Numer zamówienia: ' + orderId);
+            var divFooter = $('<div>').addClass('modal-footer');
+            var btnClose = $('<a href="index.php">').addClass('btn btn-default redirect').attr('data-dismiss', 'modal').html('Powrót na stronę główną');
+//            var btnClose = $('<button>').addClass('btn btn-default').attr('data-dismiss', 'modal').html('Powrót na stronę główną');
+            $('body').append(modalDiv.append(modalDialogDiv.append(modalContentDiv)));
+            modalContentDiv.append(modalHeaderDiv.append(h4WithTitle));
+            modalContentDiv.append(modalBodyDiv.append(pWithInfo));
+            modalContentDiv.append(divFooter.append(btnClose));
         },
         error: function () {
             console.log('Wystąpił błąd');
@@ -58,14 +75,10 @@ $(function () {
                         })
                                 .done(function (result) {
                                     console.log(result['statusToConfirm']);
-
                                 })
                                 .fail(function () {
                                     console.log('Wystąpił błąd123');
                                 });
-
-
-
                     }
                     ;
                 }
@@ -74,6 +87,12 @@ $(function () {
             }
         })
     });
+    console.log($('.redirect'));
+
+    $(document).on('click', '.redirect', function () {
+        window.location.href = "index.php";
+    });
+
 
     $(document).on('click', '.delete', function (event) {
         event.preventDefault();
@@ -109,21 +128,17 @@ $(function () {
         })
                 .done(function (result) {
                     console.log(result['orderId']);
+                    var containerDiv = $('<div>').addClass('container');
 
                 })
                 .fail(function () {
                     console.log('Wystąpił błąd123');
                 });
-                
-//        var modalDiv = $('<div>').addClass('modal fade').attr('id', 'myModal').attr('role', 'dialog');        
-//        var modalDialogDiv = $('<div').addClass('modal-dialog modal-lg');
-//        var modalContentDiv = $('<div>').addClass('modal-content');
-//        var modalHeaderDiv = $('<div>').addClass('modal-header');
-        
-                
+
+
 
     });
-    
+
     function finalPrice() {
         var changedAmount = 0;
         var thsWithPrice = $('th.itemPrice');

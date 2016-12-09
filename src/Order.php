@@ -123,7 +123,7 @@ class Order implements JsonSerializable {
 //        }
 //    }
 
-    public function confirmTheBasket(mysqli $connection, $order, $userId) {
+    public static function confirmTheBasket(mysqli $connection, $order, $userId) {
         $result = $connection->query("SELECT * FROM Orders WHERE "
                 . " order_status = 0 and user_id = '$userId' LIMIT 1");
         if ($result && $result->num_rows > 0) {

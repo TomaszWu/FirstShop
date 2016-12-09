@@ -21,12 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $newQnt = $put_vars['newQnt'];
         $orderToChangeQnt = Order::loadOrderById($conn, $orderId);
         $orderToChangeQnt->changeTheQuantity($conn, $newQnt);
-//        $productId = $orderToChangeQnt->getProducts()['product_id'];
-//        $product = Product::loadProductFromDb($conn, $productId)[0];
-//        $currentStock = $product->getStock();
-//        $product->setStock($currentStock - $productQuantity);
-//        $product->addAProductToTheDB($conn);
-        $confirmation = ['statusToConfirm' => 'Ilość zmieniona'];
+//        $confirmation = ['statusToConfirm' => 'Ilość zmieniona'];
     } elseif (isset($put_vars['confirmTheBasket'])) {
         $userId = unserialize($_SESSION['userId']);
         $basket = Order::loadTheBasket($conn, $userId);
@@ -38,11 +33,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             $product = Product::loadProductFromDb($conn, $productId)[0];
             $product->buyAProduct($conn, $quantity);
         }
-        Order::confirmTheBasket($conn, $userId);
-        $confirmation = ['statusToConfirm' => 'Zamowieie zlozone'];
+        $orderId = Order::confirmTheBasket($conn, $basket, $userId);
+        $confirmation = ['orderId' => $orderId];
+       
     } 
+     echo json_encode($confirmation);
     
-    echo json_encode($confirmation);
 } elseif ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
     parse_str(file_get_contents("php://input"), $del_vars);
     if (isset($del_vars['idToDelete'])) {
