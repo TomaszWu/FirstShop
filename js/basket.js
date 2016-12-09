@@ -5,7 +5,6 @@ $(function () {
         dataType: 'json',
         success: function (result) {
             if (result.length == 0) {
-                console.log('tak');
             } else {
                 for (var i = 0; i < result.length; i++) {
                     var order = JSON.parse(result[i]);
@@ -147,17 +146,17 @@ $(function () {
     function finalPrice() {
         var changedAmount = 0;
         var thsWithPrice = $('th.itemPrice');
+        console.log(thsWithPrice.length);
         if (thsWithPrice.length == 0) {
             $('#finalPrice').html(0);
             window.location.href = "index.php";
         } else {
-            for (var j = 0; j < thsWithPrice.length - 1; j++) {
+            for (var j = 0; j < thsWithPrice.length; j++) {
                 var priceToConvert = parseFloat(thsWithPrice[j].innerHTML);
+                console.log(priceToConvert);
                 changedAmount += priceToConvert;
-                if (j == (thsWithPrice.length - 2)) {
-                    $('#finalPrice').html(changedAmount);
-                }
             }
+            $('#finalPrice').html(changedAmount);
         }
     }
 });

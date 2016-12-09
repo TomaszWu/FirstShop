@@ -17,8 +17,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $price = $_POST['price'];
         $userId = unserialize($_SESSION['userId']);
         $order1 = new Order;
-        $order1->addTheItemInTheDB($conn, $productId, $userId, 0, 1);
-        
+        var_dump($order1->addTheItemInTheDB($conn, $productId, $userId, 0, 1));
+        var_dump($order1);
 //        $userId = unserialize($_SESSION['userId']);
 //        $user = User::loadUsersFromDB($conn, $userId)[0];
 //        $user->addTheItemToTheBasket($productId, $price, 1);
