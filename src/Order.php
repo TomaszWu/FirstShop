@@ -28,7 +28,7 @@ class Order implements JsonSerializable {
     }
 
     public function changeTheQuantity(mysqli $connection, $quantitiy) {
-        $query = "UPDATE Orders SET Product_quantity = '$quantitiy' WHERE id ='$this->orderId'";
+        $query = "UPDATE Orders SET product_quantity = '$quantitiy' WHERE id ='$this->orderId'";
         if ($connection->query($query)) {
             return true;
         } else {
@@ -123,27 +123,30 @@ class Order implements JsonSerializable {
 //        }
 //    }
 
-    public static function confirmTheBasket(mysqli $connection, $userId) {
-        $result = $connection->query("SELECT * FROM Orders where order_status = 0 and user_id = '$userId' LIMIT 1");
+    public function confirmTheBasket(mysqli $connection, $order, $userId) {
+        $result = $connection->query("SELECT * FROM Orders WHERE "
+                . " order_status = 0 and user_id = '$userId' LIMIT 1");
         if ($result && $result->num_rows > 0) {
             foreach ($result as $row) {
                 $orderIdForTheWholeBasket = $row['id'];
             }
-            $result = $connection->query("UPDATE Orders_products
-JOIN Orders ON Orders.id=Orders_products.order_id
-SET Orders_products.order_id = '$orderIdForTheWholeBasket'
-WHERE Orders.user_id = '$userId' AND Orders.order_status = 0");
+        }
+        foreach ($order as $productDetails) {
+            $singleProduct = json_decode($productDetails);
+            $result = $connection->query("UPDATE Orders
+JOIN Orders_products ON Orders.id=Orders_products.order_id
+SET Orders.order_id = '$orderIdForTheWholeBasket'
+WHERE Orders.user_id = '$userId' AND Orders.order_status = 0 AND Orders.id = '$singleProduct->orderId'");
             if ($result) {
                 $result = $connection->query("UPDATE Orders
 JOIN Orders_products ON Orders.id=Orders_products.order_id
 SET Orders.order_status = 1
-WHERE Orders.user_id = '$userId' AND Orders_products.order_id = '$orderIdForTheWholeBasket'");
-                if ($result) {
-                    return true;
-                } else {
-                    return false;
-                }
+WHERE Orders.user_id = '$userId' AND Orders.order_status = 0 AND Orders.id = '$singleProduct->orderId'");
             }
+        } if ($result) {
+            return $orderIdForTheWholeBasket;
+        } else {
+            return false;
         }
     }
 

@@ -108,16 +108,22 @@ $(function () {
             dataType: 'json'
         })
                 .done(function (result) {
-                    console.log(result['statusToConfirm']);
+                    console.log(result['orderId']);
 
                 })
                 .fail(function () {
                     console.log('Wystąpił błąd123');
                 });
+                
+//        var modalDiv = $('<div>').addClass('modal fade').attr('id', 'myModal').attr('role', 'dialog');        
+//        var modalDialogDiv = $('<div').addClass('modal-dialog modal-lg');
+//        var modalContentDiv = $('<div>').addClass('modal-content');
+//        var modalHeaderDiv = $('<div>').addClass('modal-header');
+        
+                
 
     });
-
-
+    
     function finalPrice() {
         var changedAmount = 0;
         var thsWithPrice = $('th.itemPrice');
