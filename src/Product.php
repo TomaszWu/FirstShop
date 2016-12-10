@@ -156,9 +156,15 @@ class Product implements JsonSerializable {
         if (is_null($id) && is_null($categoryId)) {
             $query = "SELECT * FROM Products LEFT JOIN Pictures ON Products.id = Pictures.Product_id";
         } elseif ($categoryId) {
-            $query = "SELECT Products.id, Products.name, Products.description, Products.category_id,  Products.price, Products.stock, Pictures.picture_link FROM Products LEFT JOIN Pictures ON Products.id = Pictures.Product_id WHERE category_id = '$categoryId'";
+            $query = "SELECT Products.id, Products.name, Products.description, "
+                    . "Products.category_id,  Products.price, Products.stock, "
+                    . "Pictures.picture_link FROM Products LEFT JOIN Pictures "
+                    . "ON Products.id = Pictures.Product_id WHERE category_id = '$categoryId'";
         } else {
-            $query = "SELECT Products.id, Products.name, Products.description, Products.category_id,  Products.price, Products.stock, Pictures.picture_link FROM Products LEFT JOIN Pictures ON Products.id = Pictures.Product_id WHERE Products.id = '$id'";
+            $query = "SELECT Products.id, Products.name, Products.description, "
+                    . "Products.category_id,  Products.price, Products.stock, "
+                    . "Pictures.picture_link FROM Products LEFT JOIN Pictures "
+                    . "ON Products.id = Pictures.Product_id WHERE Products.id = '$id'";
         }
         $productsWithoutPictures = [];
         $productsWithPictures = [];
