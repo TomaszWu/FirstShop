@@ -33,6 +33,11 @@
             width:100%;
             object-fit: contain;
         }
+        
+        body { 
+            padding-top: 65px; 
+        }
+        
 
     </style>
 </head>

@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if (isset($put_vars['orderId']) && isset($put_vars['newQnt'])) {
         $orderId = $put_vars['orderId'];
         $newQnt = $put_vars['newQnt'];
-        $orderToChangeQnt = Order::loadOrderById($conn, $orderId);
+        $orderToChangeQnt = Order::loadOrdersByOrderId($conn, $orderId);
         $orderToChangeQnt->changeTheQuantity($conn, $newQnt);
         $confirmation = ['statusToConfirm' => 'Ilość zmieniona'];
     } elseif (isset($put_vars['confirmTheBasket'])) {

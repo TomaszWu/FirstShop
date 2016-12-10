@@ -7,9 +7,9 @@ class Order implements JsonSerializable {
 
     private $id;
     private $orderId;
-    private $products;
+    public $products;
     private $userId;
-    private $status;
+    public $status;
 
     public function __construct($id = -1, $orderId = null, $products = null, $userId = null, $status = null) {
         $this->id = $id;
@@ -151,12 +151,12 @@ WHERE Orders.user_id = '$userId' AND Orders.order_status = 0 AND Orders.id = '$s
 
     static public function loadOrder(mysqli $connection, $userId = null, $orderId = null) {
         if ($orderId) {
-            $query = "SELECT Orders.user_id, Orders.order_status, Orders.order_id, Orders.id as id,
+            $query = "SELECT Orders.user_id, Orders.order_status, Orders.id, Orders.order_id,
             Products.price as product_price, Orders.product_quantity, 
             Products.id as product_id, Products.stock, Products.name as product_name FROM Orders
                 JOIN Orders_products ON Orders.id = Orders_products.order_id
                 JOIN Products ON Products.id = Orders_products.product_id
-                 WHERE Orders.id = '" . $connection->real_escape_string($orderId) . "'";
+                 WHERE Orders.order_id = '" . $connection->real_escape_string($orderId) . "'";
         } elseif ($userId) {
             $query = "SELECT Orders.user_id, Orders.order_status, Orders.id, Orders.order_id,
             Products.price as product_price, Orders.product_quantity, 
@@ -173,16 +173,16 @@ WHERE Orders.user_id = '$userId' AND Orders.order_status = 0 AND Orders.id = '$s
                 if (!isset($loadedOrders[$row['order_id']])) {
                     $loadedOrders[$row['order_id']] = [];
                 }
-                    $loadedOrder = new Order();
-                    $loadedOrder->id = $row['id'];
-                    $loadedOrder->userId = $row['user_id'];
-                    $loadedOrder->status = $row['order_status'];
-                    $loadedOrder->products['price'] = $row['product_price'];
-                    $loadedOrder->products['quantity'] = $row['product_quantity'];
-                    $loadedOrder->products['product_id'] = $row['product_id'];
-                    $loadedOrder->products['product_name'] = $row['product_name'];
-                    $loadedOrder->products['stock'] = $row['stock'];
-                    if($row['order_id'] == [$row['order_id']][0]){
+                $loadedOrder = new Order();
+                $loadedOrder->id = $row['id'];
+                $loadedOrder->userId = $row['user_id'];
+                $loadedOrder->status = $row['order_status'];
+                $loadedOrder->products['price'] = $row['product_price'];
+                $loadedOrder->products['quantity'] = $row['product_quantity'];
+                $loadedOrder->products['product_id'] = $row['product_id'];
+                $loadedOrder->products['product_name'] = $row['product_name'];
+                $loadedOrder->products['stock'] = $row['stock'];
+                if ($row['order_id'] == [$row['order_id']][0]) {
                     $loadedOrders[$row['order_id']][] = $loadedOrder;
                 }
             }
@@ -190,16 +190,21 @@ WHERE Orders.user_id = '$userId' AND Orders.order_status = 0 AND Orders.id = '$s
         return $loadedOrders;
     }
 
-    static public function loadOrdersByUserId(mysqli $connection, $orderId) {
-
+    static public function loadOrdersByOrderId(mysqli $connection, $orderId) {
+        $query = "SELECT Orders.user_id, Orders.order_status, Orders.id, Orders.order_id,
+            Products.price as product_price, Orders.product_quantity, 
+            Products.id as product_id, Products.stock, Products.name as product_name FROM Orders
+                JOIN Orders_products ON Orders.id = Orders_products.order_id
+                JOIN Products ON Products.id = Orders_products.product_id
+                 WHERE Orders.id = '" . $connection->real_escape_string($orderId) . "'";
         $res = $connection->query($query);
 
         if ($res == true && $res->num_rows == 1) {
             $row = $res->fetch_assoc();
             $loadedOrder = new Order();
+            $loadedOrder->id = $row['id'];
             $loadedOrder->userId = $row['user_id'];
             $loadedOrder->status = $row['order_status'];
-            $loadedOrder->orderId = $row['order_id'];
             $loadedOrder->products['price'] = $row['product_price'];
             $loadedOrder->products['quantity'] = $row['product_quantity'];
             $loadedOrder->products['product_id'] = $row['product_id'];

@@ -32,7 +32,7 @@ $(function () {
 
                 var id = result['id'];
                 var modalDiv = $('<div>').addClass('modal fade').attr('id', 'myModal').attr('role', 'dialog');
-                var modalDialogDiv = $('<div>').addClass('modal-dialog modal-lg');
+                var modalDialogDiv = $('<div>').addClass('modal-dialog');
                 var modalContentDiv = $('<div>').addClass('modal-content');
                 var modalHeaderDiv = $('<div>').addClass('modal-header');
                 var h4WithTitle = $('<h4>').addClass('modal-title').html('Zamówienie zostało złożone');
