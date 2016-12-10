@@ -37,7 +37,7 @@ $(function () {
                 var modalHeaderDiv = $('<div>').addClass('modal-header');
                 var h4WithTitle = $('<h4>').addClass('modal-title').html('Zamówienie zostało złożone');
                 var modalBodyDiv = $('<div>').addClass('modal-body');
-                var pWithInfo = $('<p>').html('Numer zamówienia: ' + id);
+                var pWithInfo = $('<p>').addClass('orderNumber');
                 var divFooter = $('<div>').addClass('modal-footer');
                 var btnClose = $('<a href="index.php">').addClass('btn btn-default redirect').attr('data-dismiss', 'modal').html('Powrót na stronę główną');
 //            var btnClose = $('<button>').addClass('btn btn-default').attr('data-dismiss', 'modal').html('Powrót na stronę główną');
@@ -85,7 +85,6 @@ $(function () {
                     }
                     ;
                 }
-                finalPrice();
 
             }
         })
@@ -114,13 +113,12 @@ $(function () {
                 // tutaj to nie zwraca JSONa. Analogiczny zapis w POST działał. 
 
                 .done(function (result) {
-                    console.log(result['statusToConfirm']);
-            finalPrice();
+                    finalPrice();
                 })
                 .fail(function () {
                     console.log('Wystąpił błąd2');
                 });
-        
+
 
     });
     $(document).on('click', '.confirm', function (event) {
@@ -132,13 +130,16 @@ $(function () {
             dataType: 'json'
         })
                 .done(function (result) {
+                    var orderNumber = result['orderId'];
+                    $('.orderNumber').html('Numer zamówienia: ' + orderNumber);
                     var containerDiv = $('<div>').addClass('container');
-
+                    $('.singleProduct').remove();
+                    $('#finalPrice').html(null);
+                    $('.confirm').remove();
                 })
                 .fail(function () {
-                    console.log('Wystąpił błąd123');
+                    console.log('Wystąpił błąd potwierdzenia');
                 });
-
 
 
     });
