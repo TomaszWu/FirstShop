@@ -153,7 +153,6 @@ $(function () {
         } else {
             for (var j = 0; j < thsWithPrice.length; j++) {
                 var priceToConvert = parseFloat(thsWithPrice[j].innerHTML);
-                console.log(priceToConvert);
                 changedAmount += priceToConvert;
             }
             $('#finalPrice').html(changedAmount);

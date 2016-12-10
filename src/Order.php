@@ -109,12 +109,12 @@ class Order implements JsonSerializable {
             $result = $connection->query("UPDATE Orders
 JOIN Orders_products ON Orders.id=Orders_products.order_id
 SET Orders.order_id = '$orderIdForTheWholeBasket'
-WHERE Orders.user_id = '$userId' AND Orders.order_status = 0 AND Orders.id = '$singleProduct->orderId'");
+WHERE Orders.user_id = '$userId' AND Orders.order_status = 0 AND Orders.id = '$singleProduct->id'");
             if ($result) {
                 $result = $connection->query("UPDATE Orders
 JOIN Orders_products ON Orders.id=Orders_products.order_id
 SET Orders.order_status = 1
-WHERE Orders.user_id = '$userId' AND Orders.order_status = 0 AND Orders.id = '$singleProduct->orderId'");
+WHERE Orders.user_id = '$userId' AND Orders.order_status = 0 AND Orders.id = '$singleProduct->id'");
             }
         } if ($result) {
             return $orderIdForTheWholeBasket;

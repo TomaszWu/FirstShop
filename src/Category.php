@@ -8,9 +8,8 @@ class Category {
     public $categoryId;
     public $categoryName;
 
-    public function __construct($id = -1, $categoryId = null, $categoryName = null) {
-        $this->id = $id;
-        $this->setCategoryId($categoryId);
+    public function __construct($categoryId = -1, $categoryName = null) {
+        $this->setCategoryId = $categoryId;
         $this->setCategoryName($categoryName);
     }
 
@@ -52,7 +51,6 @@ class Category {
         if ($result == true && $result->num_rows > 0) {
             foreach ($result as $row) {
                 $category = new Category();
-                $category->id = $row['id'];
                 $category->categoryId = $row['category_id'];
                 $category->categoryName = $row['category_name'];
                 $categories[] = $category;

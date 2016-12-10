@@ -1,4 +1,4 @@
-<?php
+<?php //
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
@@ -63,28 +63,6 @@ class Product implements JsonSerializable {
         }
     }
 
-//    public function addTheItemToTheBasket($userId, $quantity) {
-////            var_dump($this->userId);
-//        $query = "INSERT INTO Orders (user_id, order_status)
-//                    VALUES ('$userId', '1')";
-//        if ($connection->query($query)) {
-//            $this->id = $connection->insert_id;
-//            $orderId = $this->id;
-//            echo $orderId;
-//            $productPrice = $this->getPrice();
-//            echo $productPrice;
-//            $productId = $this->getProductId();
-//            echo $productId;
-//            $query = "INSERT INTO orders_products (product_id, order_id, product_price, product_quantity) VALUES ('$productId', '$orderId', '$productPrice', '$quantity')";
-//            if ($connection->query($query)) {
-//                return true;
-//            } else {
-//                return false;
-//            }
-//        } else {
-//            return false;
-//        }
-//    }
 
     public static function confirmTheBasket(mysqli $connection, $basket) {
         foreach ($basket as $product) {
@@ -141,7 +119,7 @@ class Product implements JsonSerializable {
             $this->stock = $this->stock - $quantity;
             $query = "UPDATE Products SET stock = '$this->stock ' WHERE id = '$this->productId'";
             if ($connection->query($query)) {
-                $this->id = $connection->insert_id;
+//                $this->id = $connection->insert_id;
                 return true;
             } else {
                 return false;
@@ -173,16 +151,15 @@ class Product implements JsonSerializable {
         }
     }
 
+
     public static function loadProductFromDb(mysqli $connection, $id = null, $categoryId = null) {
         if (is_null($id) && is_null($categoryId)) {
             $query = "SELECT * FROM Products LEFT JOIN Pictures ON Products.id = Pictures.Product_id";
         } elseif ($categoryId) {
-            $query = "SELECT * FROM Products LEFT JOIN Pictures ON Products.id = Pictures.Product_id WHERE category_id = '$categoryId'";
+            $query = "SELECT Products.id, Products.name, Products.description, Products.category_id,  Products.price, Products.stock, Pictures.picture_link FROM Products LEFT JOIN Pictures ON Products.id = Pictures.Product_id WHERE category_id = '$categoryId'";
         } else {
-            $query = "SELECT * FROM Products LEFT JOIN Pictures ON Products.id = Pictures.Product_id WHERE Products.id = '$id'";
+            $query = "SELECT Products.id, Products.name, Products.description, Products.category_id,  Products.price, Products.stock, Pictures.picture_link FROM Products LEFT JOIN Pictures ON Products.id = Pictures.Product_id WHERE Products.id = '$id'";
         }
-
-
         $productsWithoutPictures = [];
         $productsWithPictures = [];
         $result = $connection->query($query);
@@ -197,43 +174,6 @@ class Product implements JsonSerializable {
                 $product->stock = $row['stock'];
                 $product->pictures['picture_link'] = [];
                 if (!in_array($product, $productsWithoutPictures)) {
-
-                    $productsWithoutPictures[] = ($product);
-                }
-            }
-            foreach ($productsWithoutPictures as $product) {
-                $test = Product::getAllPcituresOfTheItem($connection, $product->getProductId());
-                $product->setPictures($test);
-                $productsWithPictures[] = ($product);
-            }
-        }
-        return $productsWithPictures;
-    }
-
-    public static function loadProductFromDbJson(mysqli $connection, $id = null, $categoryId = null) {
-        if (is_null($id) && is_null($categoryId)) {
-            $query = "SELECT * FROM Products LEFT JOIN Pictures ON Products.id = Pictures.Product_id";
-        } elseif ($categoryId) {
-            $query = "SELECT * FROM Products LEFT JOIN Pictures ON Products.id = Pictures.Product_id WHERE category_id = '$categoryId'";
-        } else {
-            $query = "SELECT * FROM Products LEFT JOIN Pictures ON Products.id = Pictures.Product_id WHERE Products.id = '$id'";
-        }
-        $productsWithoutPictures = [];
-        $productsWithPictures = [];
-        $result = $connection->query($query);
-        if ($result == true && $result->num_rows > 0) {
-            foreach ($result as $row) {
-                $product = new Product();
-                $product->productId = $row['id'];
-                $product->name = $row['name'];
-                $product->description = $row['description'];
-                $product->categoryId = $row['category_id'];
-//                $product->orderedQuantity = $row['ordered_quantity'];
-                $product->price = $row['price'];
-                $product->stock = $row['stock'];
-                $product->pictures['picture_link'] = [];
-                if (!in_array($product, $productsWithoutPictures)) {
-
                     $productsWithoutPictures[] = ($product);
                 }
             }
@@ -245,31 +185,6 @@ class Product implements JsonSerializable {
         }
         return $productsWithPictures;
     }
-
-//    public static function loadProductFromDb2(mysqli $connection, $id) {
-//        $query = "SELECT * FROM Products LEFT JOIN Pictures ON Products.id = Pictures.Product_id WHERE Products.id = '$id'";
-//        $products = [];
-//        $result = $connection->query($query);
-//        if ($result == true && $result->num_rows > 0) {
-//            foreach ($result as $row) {
-//                if (!$products) {
-//                    $products = new Product();
-//                    $products->productId = $row['id'];
-//                    $products->name = $row['name'];
-//                    $products->description = $row['description'];
-//                    $products->price = $row['price'];
-//                    $products->stock = $row['stock'];
-//                    $products->pictures['picture_link'] = [];
-//                }
-//                if ($row['picture_link']) {
-//                    $products->pictures['picture_link'][] = $row['picture_link'];
-//                }
-//            }
-//            return $products;
-//        }
-//    }
-
-
 
     function setPictures($pictures) {
         $this->pictures = $pictures;

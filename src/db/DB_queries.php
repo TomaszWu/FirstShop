@@ -7,10 +7,10 @@ CREATE DATABASE FirstShop
 
 CREATE TABLE Products (
 id INT PRIMARY KEY AUTO_INCREMENT,
-category VARCHAR (200) NOT NULL
+category INT NOT NULL,
 name VARCHAR (200) NOT NULL,
 description TEXT,
-price DECIMAL(8,2)
+price DECIMAL(8,2),
 stock INT
 )
 
@@ -20,14 +20,14 @@ id INT PRIMARY KEY AUTO_INCREMENT,
 name VARCHAR(200) NOT NULL,         
 surname VARCHAR (200) NOT NULL,
 email VARCHAR (200) NOT NULL UNIQUE,
-password VARCHAR (255) NOT NULL,
+hashed_password VARCHAR (255) NOT NULL,
 address VARCHAR (255) NOT NULL
 )
 
 
 CREATE TABLE Picture2s (
 picture_id INT AUTO_INCREMENT,
-picture VARCHAR(200) NOT NULL, 
+picture VARCHAR(255) NOT NULL, 
 product_id INT,
 PRIMARY KEY(picture_id),
 FOREIGN KEY(product_id)
@@ -49,6 +49,14 @@ REFERENCES Users(id)
 )
 
 
+CREATE TABLE Pictures (
+id INT AUTO_INCREMENT,
+picture_link text NOT NULL,
+product_id INT,
+PRIMARY KEY(id)
+)
+
+
 
 CREATE TABLE Orders (
 id INT AUTO_INCREMENT,
@@ -66,8 +74,6 @@ CREATE TABLE Orders_products (
 id int AUTO_INCREMENT,
 product_id int NOT NULL,
 order_id int  NOT NULL,
-product_quantity INT NOT NULL,
-product_status INT NOT NULL,
 PRIMARY KEY(id),
 FOREIGN KEY(product_id) REFERENCES Products(id),
 FOREIGN KEY (order_id) REFERENCES Orders(order_id)
@@ -78,7 +84,7 @@ FOREIGN KEY (order_id) REFERENCES Orders(order_id)
 CREATE TABLE Categories(
 id INT AUTO_INCREMENT,
 category_id INT,
-product_id INT,
+category_name VARCHAR (200) NOT NULL UNIQUE,
 PRIMARY KEY (id),
 FOREIGN KEY (product_id)
 REFERENCES Products(id)
