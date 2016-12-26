@@ -82,16 +82,21 @@ FOREIGN KEY (order_id) REFERENCES Orders(order_id)
 )
 
 CREATE TABLE Categories(
-id INT AUTO_INCREMENT,
-category_id INT,
+category_id INT AUTO_INCREMENT,
 category_name VARCHAR (200) NOT NULL UNIQUE,
-PRIMARY KEY (id),
-FOREIGN KEY (product_id)
+PRIMARY KEY (category_id),
+FOREIGN KEY (id)
 REFERENCES Products(id)
 );
 
 
-
+CREATE TABLE Admin (
+id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+    email varchar(200) UNIQUE,
+    hasshed_password varchar(200)
+    
+)
+    
 
 
 

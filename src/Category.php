@@ -4,19 +4,40 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 class Category {
 
-    public $id;
     public $categoryId;
     public $categoryName;
 
     public function __construct($categoryId = -1, $categoryName = null) {
-        $this->setCategoryId = $categoryId;
+        $this->categoryId = $categoryId;
         $this->setCategoryName($categoryName);
     }
 
+    public function addNewCategory(mysqli $connection) {
+        $query = "INSERT INTO Categories (category_name) VALUES "
+                . "('" . $connection->real_escape_string($this->categoryName) . "')";
+        $result = $connection->query($query);
+        if ($result == true) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function deleteCategory(mysqli $connection, $categotyId) {
+        $query = "DELETE FROM Categories WHERE category_id = "
+                . "('" . $connection->real_escape_string($categotyId) . "')";
+        $result = $connection->query($query);
+        if ($result == true) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public static function loadAllProductFromParticularCategory(mysqli $connection, $categoryId) {
-        $query = "SELECT * FROM Products JOIN Categories ON Products.id = Categories.product_id
-            LEFT JOIN Pictures ON Products.id = Pictures.Product_id
-                WHERE Categories.category_id = '$categoryId'";
+        $query = "SELECT * FROM Products
+                LEFT JOIN Categories ON Products.category_id = Categories.category_id
+               WHERE Categories.category_id = '$categoryId'";
         $productsWithoutPictures = [];
         $productsWithPictures = [];
         $result = $connection->query($query);
@@ -72,7 +93,7 @@ class Category {
     }
 
     function setCategoryId($categoryId) {
-        $this->categoryId = $categoryId;
+        $this->categorId = $categoryId;
     }
 
 }

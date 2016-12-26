@@ -17,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $price = $_POST['price'];
         $userId = unserialize($_SESSION['userId']);
         $order1 = new Order;
+        $order1->addTheItemInTheDB($conn, $productId, $userId, 0, 1);
     }
 }
 ?>

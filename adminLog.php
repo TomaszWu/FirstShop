@@ -4,22 +4,14 @@ require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/src/Db.php';
 $conn = DB::connect();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_POST['email']) && strlen(trim($_POST['email'])) > 4 && 
-            isset($_POST['password']) && strlen(trim($_POST['password'])) > 5) {
+    if (isset($_POST['email']) && strlen(trim($_POST['email'])) > 3 && 
+            isset($_POST['password']) && strlen(trim($_POST['password'])) > 3) {
 
         $email = trim($_POST['email']);
         $password = trim($_POST['password']);
-        $user = User::login($conn, $email, $password);
-        if ($user) {
-            $_SESSION['userId'] = $user->getUserId();
-
-            if (isset($_COOKIE['basket' . $user->getUserId()])) {
-                $basketToAddFromCookies = unserialize($_COOKIE['basket' . $user->getUserId()]);
-//                $user->basket = array_merge($user->getBasket(), $basketToAddFromCookies);
-                $user->setBasket($basketToAddFromCookies);
-            }
-            $_SESSION['basket'] = serialize($user->getBasket());
-            $_SESSION['userId'] = serialize($user->getUserId());
+        $admin = Admin::loginAdmin($conn, $email, $password);
+        if ($admin) {
+            $_SESSION['adminId'] = $admin->getId();
             header('Location: index.php');
         } else {
             echo 'Niepoprawne dane logowania';
@@ -27,12 +19,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-
-if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    if (isset($_GET['registration']) && $_GET['registration'] == 'createNewAccount') {
-        header('Location: register.php');
-    }
-}
 
 //$conn->close();
 //$conn = null;
@@ -69,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             <div class="col-sm-6 center-block Absolute-Center is-Responsive">
                 <div class="panel panel-default">
                     <div class="panel-heading"
-                         <h1>Zarejestruj się</h1>     
+                         <h1>Zaloguj się jako admin</h1>     
                     </div>
                     <div class="panel-body">
                         <form action="#" method="POST" id="loginForm">
@@ -81,19 +67,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                                 <input class="form-control" type="password" name='password' placeholder="password"/>     
                             </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox"> I agree to the <a href="#">Terms and Conditions</a>
-                                </label>
-                            </div>
                             <div class="form-group">
-                                <input type="submit" class="btn btn-def btn-block" value="zarejestruj">
+                                <input type="submit" class="btn btn-def btn-block" value="Zaloguj się">
                             </div>
-                    </div>
-                    <div class="panel-footer">
-                        <div class="form-group text-center">
-                            <a href="#">Forgot Password</a>&nbsp;|&nbsp;<a href="#">Support</a>&nbsp;|&nbsp;<a href="adminLog.php">Admin log</a>
-                        </div>
                     </div>
 
                     </form> 

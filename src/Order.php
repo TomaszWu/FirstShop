@@ -66,6 +66,16 @@ class Order implements JsonSerializable {
         }
     }
 
+    public static function changeOrderStatus(mysqli $connection, $orderId, $newStatus) {
+        $query = "UPDATE Orders SET order_status = '" . $connection->real_escape_string($newStatus) . "'"
+                . " WHERE order_id = '" . $connection->real_escape_string($orderId) . "'";
+        if ($connection->query($query)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public function manageTheOrderInTheDB(mysqli $connection, $status) {
         if ($this->orderId == -1) {
             $userId = $this->getUserId();
@@ -149,7 +159,7 @@ WHERE Orders.user_id = '$userId' AND Orders.order_status = 0 AND Orders.id = '$s
         return $basket;
     }
 
-    static public function loadOrder(mysqli $connection, $userId = null, $orderId = null) {
+    static public function loadOrder(mysqli $connection, $userId = null, $orderId = null, $status = null) {
         if ($orderId) {
             $query = "SELECT Orders.user_id, Orders.order_status, Orders.id, Orders.order_id,
             Products.price as product_price, Orders.product_quantity, 
@@ -164,6 +174,19 @@ WHERE Orders.user_id = '$userId' AND Orders.order_status = 0 AND Orders.id = '$s
                 JOIN Orders_products ON Orders.id = Orders_products.order_id
                 JOIN Products ON Products.id = Orders_products.product_id
                  WHERE Orders.user_id ='$userId'";
+        } elseif ($status || $status == 0) {
+            $query = "SELECT Orders.user_id, Orders.order_status, Orders.id, Orders.order_id,
+            Products.price as product_price, Orders.product_quantity, 
+            Products.id as product_id, Products.stock, Products.name as product_name FROM Orders
+                JOIN Orders_products ON Orders.id = Orders_products.order_id
+                JOIN Products ON Products.id = Orders_products.product_id
+                WHERE Orders.order_status = '" . $connection->real_escape_string($status) . "'";
+        } else {
+            $query = "SELECT Orders.user_id, Orders.order_status, Orders.id, Orders.order_id,
+            Products.price as product_price, Orders.product_quantity, 
+            Products.id as product_id, Products.stock, Products.name as product_name FROM Orders
+                JOIN Orders_products ON Orders.id = Orders_products.order_id
+                JOIN Products ON Products.id = Orders_products.product_id";
         }
 
         $res = $connection->query($query);
@@ -177,6 +200,7 @@ WHERE Orders.user_id = '$userId' AND Orders.order_status = 0 AND Orders.id = '$s
                 $loadedOrder->id = $row['id'];
                 $loadedOrder->userId = $row['user_id'];
                 $loadedOrder->status = $row['order_status'];
+                $loadedOrder->orderId = $row['order_id'];
                 $loadedOrder->products['price'] = $row['product_price'];
                 $loadedOrder->products['quantity'] = $row['product_quantity'];
                 $loadedOrder->products['product_id'] = $row['product_id'];

@@ -4,19 +4,25 @@ class Massage {
 
     private $id;
     private $title;
-    private $massage;
+    private $text;
     private $user_id;
+    private $status;
 
-    public function __construct($id = -1, $title = null, $massage = null, $user_id = null) {
+    public function __construct($id = -1, $title = null, $text = null, $user_id = null, $status = null) {
         $this->id = $id;
-        $this->setMassage($massage);
+        $this->setText($text);
         $this->setTitle($title);
         $this->setUser_id($user_id);
+        $this->setStatus($status);
     }
 
     public function addAMassageToDB(mysqli $connection) {
         if ($this->id == -1) {
-            $query = "INSERT INTO Massages (massage, user_id) VALUES ('" . mysqli_real_escape_string($connection, $this->text) . "' , '" . mysqli_real_escape_string($connection, $this->user_id) . "')";
+            $query = "INSERT INTO Massages (title, massage, user_id, status) VALUES ("
+                    . "'" . mysqli_real_escape_string($connection, $this->title) . 
+                    "' ,'" . mysqli_real_escape_string($connection, $this->text) . 
+                    "' , '" . mysqli_real_escape_string($connection, $this->user_id) . 
+                    "', '" . mysqli_real_escape_string($connection, $this->status) . "')";
             if ($connection->query($query)) {
                 $this->id = $connection->insert_id;
                 return true;
@@ -65,12 +71,17 @@ class Massage {
     function setTitle($title) {
         $this->title = $title;
     }
-    function setMassage($massage) {
-        $this->massage = $massage;
+    
+    function setText($text) {
+        $this->text = $text;
     }
 
     function setUser_Id($user_id) {
         $this->user_id = $user_id;
+    }
+    
+    function setStatus($status) {
+        $this->status = $status;
     }
 
 }

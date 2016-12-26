@@ -8,7 +8,6 @@ $(function () {
             } else {
                 for (var i = 0; i < result.length; i++) {
                     var order = JSON.parse(result[i]);
-                    console.log(order);
                     var finalPrice = order.products.price * order.products.quantity;
                     var row = ('<tr class="singleProduct" data-id="' + order.id + '"><th class="productName">'
                             + order.products.product_name + '</th><th class="orderedQnt">\n\
@@ -51,25 +50,26 @@ $(function () {
             console.log('Wystąpił błąd');
         }
     });
+ 
 
 
     $(document).on('click', '#changeTheQnt', function (el) {
+
         $.ajax({
             url: 'api/basketManagment.php',
             type: 'GET',
             dataType: 'json',
             success: function (result) {
-
                 var idToCompare = $(el.target).parent().parent().attr('data-id');
                 for (var i = 0; i < result.length; i++) {
                     var itemToCompare = JSON.parse(result[i]);
-                    console.log(itemToCompare);
                     if (itemToCompare.id == idToCompare) {
                         $(el.target).attr('max', itemToCompare.products.stock);
                         var price = itemToCompare.products.price;
                         var newQnt = $(el.target).val();
                         var newPrice = newQnt * price;
                         $(el.target).parent().next().html(newPrice);
+
                         $.ajax({
                             url: 'api/basketManagment.php',
                             type: 'PUT',
@@ -78,6 +78,8 @@ $(function () {
                         })
                                 .done(function (result) {
                                     console.log(result['statusToConfirm']);
+                                    finalPrice();
+
                                 })
                                 .fail(function () {
                                     console.log('Wystąpił błąd123');
@@ -87,7 +89,9 @@ $(function () {
                 }
 
             }
+
         })
+
     });
     console.log($('.redirect'));
 
@@ -147,7 +151,6 @@ $(function () {
     function finalPrice() {
         var changedAmount = 0;
         var thsWithPrice = $('th.itemPrice');
-        console.log(thsWithPrice.length);
         if (thsWithPrice.length == 0) {
             $('#finalPrice').html(0);
             window.location.href = "index.php";

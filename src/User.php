@@ -154,11 +154,11 @@ class User implements JsonSerializable {
         return $usersOrders;
     }
 
-    public static function loadUsersFromDB(mysqli $conn, $id = null) {
+    public static function loadUsersFromDB(mysqli $connection, $id = null) {
         if (is_null($id)) {
-            $result = $conn->query('SELECT * FROM Users');
+            $result = $connection->query('SELECT * FROM Users');
         } else {
-            $result = $conn->query("SELECT * FROM Users WHERE id='" . intval($id) . "'");
+            $result = $connection->query("SELECT * FROM Users WHERE id='" . intval($id) . "'");
         }
 
         $usersList = [];
@@ -177,21 +177,15 @@ class User implements JsonSerializable {
         }
         return $usersList;
     }
-
-//    static public function login(mysqli $connection, $email, $password) {
-////        $email = $connection->real_escape_string($mail); tak też można
-//        $query = "SELECT * FROM Users WHERE email ='" . mysqli_real_escape_string($connection, $email) . "'";
-//        $res = $connection->query($query);
-//        if ($res->num_rows == 1) {
-//            $row = $res->fetch_assoc();
-//            if (password_verify($password, $row['hashed_password'])) {
-//                return $row['id'];
-//            } else {
-//                return false;
-//            }
-//        }
-//        return false;
-//    }
+    
+    public function deleteUser(mysqli $connection){
+        $query = "DELETE FROM Users WHERE id = '$this->userId'";
+        if ($connection->query($query)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     function getUserId() {
         return $this->userId;

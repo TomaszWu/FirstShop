@@ -8,7 +8,8 @@ var_dump($_POST);
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     var_dump($_FILES);
     $allowedFileTypes = ['image/png', 'image/jpeg', 'image/gif'];
-    if (isset($_POST['pictureId']) && isset($_FILES['fileToUpload']) && $_FILES['fileToUpload']['size'] > 0 && in_array($_FILES['fileToUpload']['type'], $allowedFileTypes)) {
+    if (isset($_POST['pictureId']) && isset($_FILES['fileToUpload']) && 
+            $_FILES['fileToUpload']['size'] > 0 && in_array($_FILES['fileToUpload']['type'], $allowedFileTypes)) {
         $productId = $_POST['pictureId'];
         var_dump($productId);
         $uploadDir = 'Pictures';

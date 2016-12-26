@@ -4,49 +4,62 @@ require_once __DIR__ . '/../vendor/autoload.php';
 
 class Admin {
 
-    private $name;
-    private $mail;
-    private $password;
+    private $id;
+    private $email;
+    private $hashedPassword;
 
-    private function __construct($id = -1, $name = null, $email = null, $password = null) {
+    private function __construct($id = -1, $email = null, $hashedPassword = null) {
         $this->id = $id;
-        $this->setName($name);
-        $this->email($email);
-        $this->password($password);
+        $this->setEmail($email);
+        $this->setHashedPassword($hashedPassword);
     }
-    
-    
+
+    static public function loginAdmin(mysqli $connection, $email, $password) {
+        $admin = self::loadByEmail($connection, $email);
+        if ($admin && password_verify($password, $admin->hashedPassword)) {
+            return $admin;
+        } else {
+            return false;
+        }
+    }
+
+    static public function loadByEmail(mysqli $connection, $email) {
+        $query = "SELECT * FROM Admin WHERE email = '" . $connection->real_escape_string($email) . "'";
+
+        $res = $connection->query($query);
+        if ($res && $res->num_rows == 1) {
+            $row = $res->fetch_assoc();
+            $admin = new Admin();
+            $admin->setId($row['id']);
+            $admin->setEmail($row['email']);
+            $admin->hashedPassword = $row['hashed_password'];
+            return $admin;
+        }
+        return null;
+    }
 
     function getId() {
         return $this->id;
-    } 
-    
-    function getName() {
-        return $this->name;
     }
 
-    function getMail() {
-        return $this->mail;
+    function setId($id) {
+        $this->id = $id;
     }
 
-    function getPassword() {
-        return $this->password;
+    function getEmail() {
+        return $this->email;
     }
 
-    function setName($name) {
-        $this->name = $name;
+    function getHashedPassword() {
+        return $this->hashedPassword;
     }
 
-    function setMail($mail) {
-        $this->mail = $mail;
+    function setEmail($email) {
+        $this->email = $email;
     }
 
-    function setPassword($password) {
-        $this->password = $password;
+    function setHashedPassword($hashedPassword) {
+        $this->hashedPassword = $hashedPassword;
     }
 
-
-    
-    
-    
 }

@@ -54,7 +54,7 @@ $categories = Category::getAllCategories($conn);
                         <label for="sel1">Select list (select one):</label>
                         <select class="form-control" id="sel1" name="categoryId">
                             <?php foreach ($categories as $category) { ?>
-                                <option value="<?php echo $category->getCategoryId() ?>"><?php echo $category->getCategoryName() ?></option>
+                                <option value="<?php echo $category->getCategoryId(); ?>"><?php echo $category->getCategoryName() ?></option>
                             <?php } ?>
                         </select>
                     </div>
@@ -70,7 +70,6 @@ $categories = Category::getAllCategories($conn);
                         $price = $_POST['price'];
                         $stock = $_POST['stock'];
                         $categoryId = $_POST['categoryId'];
-                        $productToAdd = new Product($name, $description, $price, $stock, $categoryId);
                         $productToAdd = new Product();
                         $productToAdd->setName($name);
                         $productToAdd->setDescription($description);

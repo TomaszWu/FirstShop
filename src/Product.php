@@ -90,6 +90,33 @@ class Product implements JsonSerializable {
             return false;
         }
     }
+    public function changeProductDescription(mysqli $connection, $newDescription) {
+        $productId = $this->productId;
+        $query = "UPDATE Products SET description = '$newDescription' WHERE id = '$this->productId'";
+        if ($connection->query($query)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    public function changeProductStock(mysqli $connection, $newStock) {
+        $productId = $this->productId;
+        $query = "UPDATE Products SET stock = '$newStock' WHERE id = '$this->productId'";
+        if ($connection->query($query)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    public function deleteTheItem(mysqli $connection) {
+        $query = "DELETE FROM Products WHERE id = '$this->productId'";
+        if ($connection->query($query)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
     public function addAProductToTheDB(mysqli $connection) {
         if ($this->productId == -1) {
