@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     //zgodnie z rest POST dodaje dane
 } elseif ($_SERVER['REQUEST_METHOD'] == 'PUT') {
     parse_str(file_get_contents('php://input'), $put_vars);
-    if (isset($put_vars['newStatus']) && isset($put_vars['orderId']) && 
+    if (isset($put_vars['newStatus']) && isset($put_vars['orderId']) &&
             isset($put_vars['userId'])) {
         $newOrderStatus = $put_vars['newStatus'];
         $orderId = $put_vars['orderId'];
@@ -46,14 +46,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
 
         $massage = new Massage();
-        $massage->setTitle('Informacja o zmianie statusu zamówien');
-        $massage->setText('Informujemy, że zamówienie o nr ' . $orderId . 
+        $massage->setTitle('Informacja o zmianie statusu zamówienia nr' . $orderId);
+        $massage->setText('Informujemy, że zamówienie o nr ' . $orderId .
                 ' otrzymało status: ' . $newOrderStatus);
         $massage->setUser_Id($userId);
+        $massage->setStatus(0);
         $massage->addAMassageToDB($conn);
 
         $confirmation = [0 => 'ok'];
-    } elseif (isset($put_vars['userId']) && isset($put_vars['title']) && 
+    } elseif (isset($put_vars['userId']) && isset($put_vars['title']) &&
             isset($put_vars['msg'])) {
         $userId = $put_vars['userId'];
         $title = $put_vars['title'];
@@ -62,7 +63,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $massage->setTitle($title);
         $massage->setText($msg);
         $massage->setUser_Id($userId);
+        $massage->setStatus(0);
         $massage->addAMassageToDB($conn);
+        $confirmation = [0 => 'ok'];
+    } elseif (isset($put_vars['msgId'])) {
+        $msgId = $put_vars['msgId'];
+        $massage = Massage::loadMassagesFromDB($conn, null, $msgId)[0];
+        $massage->changeTheStatus($conn, 1);
         $confirmation = [0 => 'ok'];
     }
     echo json_encode($confirmation);

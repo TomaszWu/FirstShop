@@ -109,9 +109,6 @@ $(function () {
                     console.log('Wystąpił błąd');
                 }
             })
-
         })
-
-
     })
 })
