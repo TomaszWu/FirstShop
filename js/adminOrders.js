@@ -27,7 +27,7 @@ $(function () {
 <option class="option3" value="3">3</option></select></td><td>\n\
 <button class="btn btn-warning changeStatus">Zmień status zamówienia</button>\n\
 </td><td><button class="btn btn-danger delete">Usuń zamówienie</button></td>\n\
-<td><button class="btn btn-info sendMsg" id="' + userId + '">Wyślij wiadomość</button></td></tr>\n\
+<td><button class="btn btn-info btn-lg createMsg" data-toggle="modal" data-target="#myModal" id="' + userId + '">Wyślij wiadomość</button></td></tr>\n\
 ');
 
                     $('tbody').append(tr);
@@ -48,15 +48,18 @@ $(function () {
 
                     var newStatus = $(el.target).parent().prev().children().val();
                     var orderId = $(el.target).parent().parent().attr('orderNumber');
-                    console.log(orderId);
+                    var userId = $(el.target).parent().parent().attr('id');
                     $.ajax({
                         url: 'api/adminOrdersManagment.php',
                         type: 'PUT',
-                        data: {newStatus: newStatus, orderId: orderId},
+                        data: {newStatus: newStatus, orderId: orderId, userId: userId},
                         dataType: 'json',
                         success: function (result) {
                             $(el.target).parent().parent().remove();
                         },
+                        error: function () {
+                            console.log('Wystąpił błąd');
+                        }
                     })
 
                 });
@@ -81,10 +84,34 @@ $(function () {
             },
 //            error: function () {
 //                // mimo że funckja kasuje pozyjcę to jednak zwraca ona błąd. Nie rozumiem
-////                dlaczego
+////                dlaczego???
 ////                console.log('Wystąpił błąd');
 //            }
         })
         $(el.target).parent().parent().remove();
     });
+
+
+    $(document).on('click', '.createMsg', function (el) {
+        var userId = $(el.target).parent().parent().attr('id');
+        console.log(userId);
+        $('#sendMsg').on('click', function (el) {
+            var title = $('#titleToAdd').val();
+            var msg = $('#msgToSend').val();
+            $.ajax({
+                url: 'api/adminOrdersManagment.php',
+                type: 'PUT',
+                data: {userId: userId, title: title, msg: msg},
+                dataType: 'json',
+                success: function (result) {
+                },
+                error: function () {
+                    console.log('Wystąpił błąd');
+                }
+            })
+
+        })
+
+
+    })
 })
