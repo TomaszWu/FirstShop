@@ -57,8 +57,18 @@ class Order implements JsonSerializable {
         }
     }
 
+// konstrukacja tworzenia zamówien wymaga takiego rozwiązania. Zamówienia potwiedzone mają
+//    wspólny nr zamówienia, zamówienia niepotwierdzone, w koszyki, w ogóle nie mają nr
+//    zamówienia. Stąd też w pierwszej kolejności sprawdzam, że czy zamówienie potwierdzone
+//    istnieje w db, jeżeli nie, oznacza to, że to jest zamówienie koszykowe. 
     public static function deleteTheItemFromBasket(mysqli $connection, $orderId) {
-        $query = "DELETE FROM Orders WHERE Orders.id = '$orderId'";
+        $checkIfOrderWithThisOrderIdExists = self::loadOrder($connection, null, $orderId);
+        var_dump($checkIfOrderWithThisOrderIdExists);
+        if (!$checkIfOrderWithThisOrderIdExists) {
+            $query = "DELETE FROM Orders WHERE Orders.id = '$orderId'";
+        } else {
+            $query = "DELETE FROM Orders WHERE Orders.order_id = '$orderId'";
+        }
         if ($connection->query($query)) {
             return true;
         } else {

@@ -46,5 +46,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     $confirmation = [0 => 'ok'];
     echo json_encode($confirmation);
 } elseif ($_SERVER['REQUEST_METHOD'] == 'DELETE') {
-    
+    parse_str(file_get_contents("php://input"), $del_vars);
+    if (isset($del_vars['orderIdToDelete'])) {
+        $orderIdToDelete = $del_vars['orderIdToDelete'];
+        Order::deleteTheItemFromBasket($conn, $orderIdToDelete);
+        $confirmation = [0 => 'skasowane'];
+    }
+    echo json_encode($confirmation);
 }
