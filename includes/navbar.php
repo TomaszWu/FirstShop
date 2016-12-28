@@ -1,5 +1,8 @@
 <?php
-//var_dump($_SESSION); 
+require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../src/Db.php';
+$conn = DB::connect();
+$allCategies = Category::getAllCategories($conn);
 ?>
 
 <!--<body data-spy="scroll" data-target=".navbar" data-offset="50">-->
@@ -17,10 +20,16 @@
             <div>
                 <div class="collapse navbar-collapse" id="myNavbar">
                     <ul class="nav navbar-nav">
-                        <li><a href="#section1">Samochody</a></li>
-                        <li><a href="#section2">Kwiaty</a></li>
-                        <li><a href="#section3">Narkotyki</a></li>
-
+                        <?php
+                        $i = 0;
+                        foreach($allCategies as $singleCategory){
+                            ?>
+                            <li><a href="#section<?php echo $i ?>"><?php echo $singleCategory->getCategoryName() ?></a></li>
+                            
+                            <?php
+                            $i++;
+                        }
+                        ?>
                         <?php if (isset($_SESSION['adminId'])) { ?>
                             <li class="dropdown">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">Panel administratora
@@ -37,17 +46,17 @@
                     <ul class="nav navbar-nav navbar-right">
                         <?php if (isset($_SESSION['userId'])) { ?>
                             <li><a href="register.php"><span class="glyphicon glyphicon-envelope"></span> Wiadomości</a></li>
-                        <?php
+                            <?php
                         }
                         if (isset($_SESSION['userId'])) {
                             ?>
                             <li><a href="basket.php"><span class="glyphicon glyphicon-shopping-cart"></span> Koszyk</a></li>
-                        <?php
+                            <?php
                         }
                         if (isset($_SESSION['userId'])) {
                             ?>
                             <li><a href="orders.php"><span class="glyphicon glyphicon-eye-open"></span> Zamówienia</a></li>
-                        <?php
+                            <?php
                         }
                         if (!isset($_SESSION['userId'])) {
                             ?>
@@ -58,11 +67,11 @@
                             ?>
                             <li><a href="login.php"><span class="glyphicon glyphicon-log-isn"></span> Login</a></li>
                             <?php
-                            }
-                            if (isset($_SESSION['userId'])) {
-                                ?>
+                        }
+                        if (isset($_SESSION['userId'])) {
+                            ?>
                             <li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
-<?php } ?>
+                            <?php } ?>
                     </ul>
                 </div>
 

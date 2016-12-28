@@ -66,7 +66,7 @@ class Category {
     }
 
     public static function getAllCategories(mysqli $connection) {
-        $query = "SELECT * FROM Categories";
+        $query = "SELECT * FROM Categories ORDER BY category_id";
         $categories = [];
         $result = $connection->query($query);
         if ($result == true && $result->num_rows > 0) {
@@ -79,8 +79,21 @@ class Category {
         }
         return $categories;
     }
-
-    function getCategoryName() {
+    
+    
+    public static function getCategoryById(mysqli $connection, $categoryId){
+        $result = $connection->query("SELECT * FROM Categories WHERE category_id = '" . 
+                $connection->real_escape_string($categoryId) . "'");
+        if ($result == true && $result->num_rows == 1) {
+            $row = $result->fetch_assoc();
+            $category = new Category();
+            $category->setCategoryId($row['category_id']);
+            $category->setCategoryName($row['category_name']);
+            return $category;
+        }
+    }
+            
+            function getCategoryName() {
         return $this->categoryName;
     }
 

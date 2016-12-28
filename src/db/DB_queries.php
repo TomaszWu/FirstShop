@@ -97,7 +97,14 @@ id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     
 )
     
+CREATE TABLE PicturesToCategory (
+id INT AUTO_INCREMENT,
+category_id INT,
+picture_link text NOT NULL,
+product_id INT,
+PRIMARY KEY(id)
 
+}
 
 
 

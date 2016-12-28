@@ -11,11 +11,12 @@
         body {
             position: relative;
         }
+/*        #section0 {padding-top:50px;height:500px;color: #fff; background-color: 'red';}
         #section1 {padding-top:50px;height:500px;color: #fff; background-color: #1E88E5;}
         #section2 {padding-top:50px;height:500px;color: #fff; background-color: #673ab7;}
         #section3 {padding-top:50px;height:500px;color: #fff; background-color: #ff9800;}
         #section41 {padding-top:50px;height:500px;color: #fff; background-color: #00bcd4;}
-        #section42 {padding-top:50px;height:500px;color: #fff; background-color: #009688;}
+        #section42 {padding-top:50px;height:500px;color: #fff; background-color: #009688;}*/
 
         .carousel-inner > .item > img,
         .carousel-inner > .item > a > img {
@@ -35,7 +36,7 @@
         }
         
         body { 
-            padding-top: 65px; 
+            padding-top: 50px; 
         }
         
 

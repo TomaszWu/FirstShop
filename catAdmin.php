@@ -43,7 +43,11 @@ if (!isset($_SESSION['adminId'])) {
                             ?> 
                             <tr>
                                 <td><a href="showCategory.php?id=<?php echo $category->getCategoryId();
-                            ?>"><?php echo $category->getCategoryName() ?> </a></td><td><a href="catAdmin.php?id=<?php echo $category->getCategoryId() ?>">Skasuj kategorię</a></td>
+                            ?>"><?php echo $category->getCategoryName() ?> 
+                                    </a></td><td><a href="catAdmin.php?id=<?php 
+                                    echo $category->getCategoryId() 
+                           ?>">Skasuj kategorię</a><td><a href="addPhotoForMainPage.php?categoryId=<?php 
+                           echo $category->getCategoryId(); ?>">Dodaj zdjęcie na stonę główną</a></td></td>
                             </tr>
                         <?php } ?> 
                     </tbody>
