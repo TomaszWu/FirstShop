@@ -22,12 +22,17 @@ $allCategies = Category::getAllCategories($conn);
                     <ul class="nav navbar-nav">
                         <?php
                         $i = 0;
-                        foreach($allCategies as $singleCategory){
-                            ?>
-                            <li><a href="#section<?php echo $i ?>"><?php echo $singleCategory->getCategoryName() ?></a></li>
-                            
-                            <?php
-                            $i++;
+                        foreach ($allCategies as $singleCategory) {
+                            // kategoria jest widoczna dopiero, gdy sa da niej wgrane zdjęcia profilowe
+                            $categoryId = $singleCategory->getCategoryId();
+                            $mainPagePhotos = Picture::getPhotoForMainPageForOneCategory($conn, $categoryId);
+                            if ($mainPagePhotos) {
+                                ?>
+                                <li><a href="#section<?php echo $i ?>"><?php echo $allCategies[$i]->getCategoryName() ?></a></li>
+
+                                <?php
+                                $i++;
+                            }
                         }
                         ?>
                         <?php if (isset($_SESSION['adminId'])) { ?>
@@ -38,14 +43,15 @@ $allCategies = Category::getAllCategories($conn);
                                     <li><a href="catAdmin.php">Zarządzanie grupami</a></li>
                                     <li><a href="itemsAdmin.php">Zarządzanie przedmiotami</a></li>
                                     <li><a href="adminUsers.php">Zarządzanie użytkownikami</a></li>
-                                    <li><a href="#">Zarządzanie zamówieniami</a></li>
+                                    <li><a href="adminOrders.php">Zarządzanie zamówieniami</a></li>
+                                    <li><a href="logout.php">Wyloguj się jako admin</a></li>
                                 </ul>
                             </li>
                         <?php } ?>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <?php if (isset($_SESSION['userId'])) { ?>
-                            <li><a href="register.php"><span class="glyphicon glyphicon-envelope"></span> Wiadomości</a></li>
+                            <li><a href="massages.php"><span class="glyphicon glyphicon-envelope"></span> Wiadomości</a></li>
                             <?php
                         }
                         if (isset($_SESSION['userId'])) {

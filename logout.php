@@ -2,9 +2,12 @@
 
 session_start();
 
-if(isset($_SESSION['userId'])){
+if (isset($_SESSION['userId'])) {
     unset($_SESSION['userId']);
-  
 }
-    
-    header('Location: index.php');
+
+if (isset($_SESSION['adminId'])) {
+    unset($_SESSION['adminId']);
+}
+
+header('Location: index.php');

@@ -9,7 +9,6 @@ require_once (__DIR__ . '/src/Product.php');
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if (isset($_GET['productId'])) {
         $_SESSION['productId'] = $_GET['productId'];
-        
     }
 }
 
@@ -213,9 +212,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </table>
                 <?php } else { ?>
                     <form method="POST" action="">
-                        <input type="submit" class="btn btn-info" name="productId" value="Dodaj do koszyka">
-                        <input type="hidden" class="btn btn-info" name="productId" value="<?php echo $productId ?>">
-                        <input type="hidden" class="btn btn-info" name="price" value="<?php echo $price ?>">
+                        <?php if (isset($_SESSION['userId'])) { ?>
+                            <input type="submit" class="btn btn-info" name="productId" value="Dodaj do koszyka">
+                            <input type="hidden" class="btn btn-info" name="productId" value="<?php echo $productId ?>">
+                            <input type="hidden" class="btn btn-info" name="price" value="<?php echo $price ?>">
+                        <?php } else { ?>
+                            <button type="button" class="btn btn-primary disabled"><abbr title="Zaloguj się aby móc kontynuować zakupy">Dodaj do koszyka</abbr></button>
+                        <?php } ?>
                     </form>
                 <?php } ?>
             </div>
