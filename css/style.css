@@ -1,0 +1,24 @@
+body {
+    position: relative;
+}
+
+.carousel-inner > .item > img,
+.carousel-inner > .item > a > img {
+    width: 70%;
+    margin: auto;
+}
+.product .img-responsive {
+    margin: 0 auto;
+}
+.item {
+
+}
+.item img{
+    max-height:285px;
+    width:100%;
+    object-fit: contain;
+}
+
+body { 
+    padding-top: 50px; 
+}

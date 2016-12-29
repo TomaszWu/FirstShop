@@ -66,11 +66,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $massage->setStatus(0);
         $massage->addAMassageToDB($conn);
         $confirmation = [0 => 'ok'];
-    } elseif (isset($put_vars['msgId'])) {
-        $msgId = $put_vars['msgId'];
-        $massage = Massage::loadMassagesFromDB($conn, null, $msgId)[0];
-        $massage->changeTheStatus($conn, 1);
-        $confirmation = [0 => 'ok'];
     }
     echo json_encode($confirmation);
 } elseif ($_SERVER['REQUEST_METHOD'] == 'DELETE') {

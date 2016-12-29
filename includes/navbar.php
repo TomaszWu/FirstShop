@@ -51,7 +51,7 @@ $allCategies = Category::getAllCategories($conn);
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <?php if (isset($_SESSION['userId'])) { ?>
-                            <li><a href="massages.php"><span class="glyphicon glyphicon-envelope"></span> Wiadomości</a></li>
+                        <li><a href="massages.php"><span class="glyphicon glyphicon-envelope"></span> Wiadomości <span  id="massages"></span></a></li>
                             <?php
                         }
                         if (isset($_SESSION['userId'])) {

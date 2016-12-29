@@ -1,6 +1,6 @@
 <?php
 
-class Massage {
+class Massage implements JsonSerializable {
 
     private $id;
     private $title;
@@ -32,6 +32,17 @@ class Massage {
         }
     }
 
+    public function jsonSerialize() {
+        //funkcja zwraca nam dane z obiketu do json_encode
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'text' => $this->text,
+            'user_id' => $this->user_id,
+            'status' => $this->status
+        ];
+    }
+
     public function changeTheStatus(mysqli $connection, $status) {
         $query = "UPDATE Massages SET Status = '" . mysqli_real_escape_string($connection, $status) . "' WHERE massage_id = '" . intval($this->id) . "'";
 
@@ -43,12 +54,12 @@ class Massage {
         }
     }
 
-    public static function loadMassagesFromDB(mysqli $conn, $user_id = null, $msgId = null) {
+    public static function loadMassagesFromDB(mysqli $connection, $user_id = null, $msgId = null) {
         if ($user_id) {
-            $result = $conn->query("SELECT * FROM Massages WHERE user_id='" . intval($user_id) . "' "
+            $result = $connection->query("SELECT * FROM Massages WHERE user_id='" . intval($user_id) . "' "
                     . " ORDER BY massage_id DESC ");
         } elseif ($msgId) {
-            $result = $conn->query("SELECT * FROM Massages WHERE massage_id='" . intval($msgId) . "'");
+            $result = $connection->query("SELECT * FROM Massages WHERE massage_id='" . intval($msgId) . "'");
         }
         $massagesList = [];
 
@@ -60,7 +71,26 @@ class Massage {
                 $dbMassage->text = $row['massage'];
                 $dbMassage->user_id = $row['user_id'];
                 $dbMassage->status = $row['status'];
-                $massagesList[] = $dbMassage;
+                $massagesList[] = ($dbMassage);
+            }
+        }
+        return $massagesList;
+    }
+
+    public static function loadMassagesByStatus(mysqli $connection, $status, $userId) {
+        $result = $connection->query("SELECT * FROM Massages WHERE status='" . 
+                intval($status) . "' AND user_id = '" . intval($userId) . "'");
+        $massagesList = [];
+
+        if ($result && $result->num_rows > 0) {
+            foreach ($result as $row) {
+                $dbMassage = new Massage();
+                $dbMassage->id = $row['massage_id'];
+                $dbMassage->title = $row['title'];
+                $dbMassage->text = $row['massage'];
+                $dbMassage->user_id = $row['user_id'];
+                $dbMassage->status = $row['status'];
+                $massagesList[] = json_encode($dbMassage);
             }
         }
         return $massagesList;
