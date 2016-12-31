@@ -1,6 +1,10 @@
-<?php //
+<?php
+
+//
 
 require_once __DIR__ . '/../vendor/autoload.php';
+require_once   __DIR__ . '/../Exceptions/InvalidLengthException.php';
+
 
 class Product implements JsonSerializable {
 
@@ -9,23 +13,21 @@ class Product implements JsonSerializable {
     public $description;
     public $categoryId;
     public $price;
-    public $orderedQuantity;
-    public $keyInTheBasket;
     public $stock;
     public $pictures;
 
-    public function __construct($productId = -1, $name = null, $description = null, $categoryId = null, $price = null, $orderedQuantity = null, $keyInTheBasket = null, $stock = null) {
+    public function __construct($productId = -1, $name = null, $description = null, $categoryId = null, $price = null, $stock = null) {
         $this->productId = $productId;
         $this->setName($name);
         $this->setDescription($description);
         $this->setCategoryId($categoryId);
         $this->setPrice($price);
-        $this->setOrderedQuantity($orderedQuantity);
-        $this->setKeyInTheBasket($keyInTheBasket);
         $this->setStock($stock);
         $this->pictures = [];
 //        $this->position = 0;
     }
+    
+    
 
     public function jsonSerialize() {
         return [
@@ -34,8 +36,6 @@ class Product implements JsonSerializable {
             'description' => $this->description,
             'categoryId' => $this->categoryId,
             'price' => $this->price,
-            'orderedQuantity' => $this->orderedQuantity,
-            'keyInTheBasket' => $this->keyInTheBasket,
             'stock' => $this->stock,
             'pictures' => $this->pictures,
         ];
@@ -63,7 +63,6 @@ class Product implements JsonSerializable {
         }
     }
 
-
     public static function confirmTheBasket(mysqli $connection, $basket) {
         foreach ($basket as $product) {
 //            $productsPriceFromDB = new Product();
@@ -90,6 +89,7 @@ class Product implements JsonSerializable {
             return false;
         }
     }
+
     public function changeProductDescription(mysqli $connection, $newDescription) {
         $productId = $this->productId;
         $query = "UPDATE Products SET description = '$newDescription' WHERE id = '$this->productId'";
@@ -99,6 +99,7 @@ class Product implements JsonSerializable {
             return false;
         }
     }
+
     public function changeProductStock(mysqli $connection, $newStock) {
         $productId = $this->productId;
         $query = "UPDATE Products SET stock = '$newStock' WHERE id = '$this->productId'";
@@ -108,7 +109,7 @@ class Product implements JsonSerializable {
             return false;
         }
     }
-    
+
     public function deleteTheItem(mysqli $connection) {
         $query = "DELETE FROM Products WHERE id = '$this->productId'";
         if ($connection->query($query)) {
@@ -139,7 +140,7 @@ class Product implements JsonSerializable {
     }
 
     public function buyAProduct(mysqli $connection, $quantity) {
-        
+
         if ($this->stock - $quantity < 0) {
             throw new InvalidArgumentException('Niestety, produkt nie jest dostępny w podanej ilości');
         } else {
@@ -160,9 +161,11 @@ class Product implements JsonSerializable {
             if ($connection->query($query)) {
                 $this->id = $connection->insert_id;
                 return true;
-            }
-        } else {
+//            }
+        } 
+        else {
             throw new InvalidArgumentException('Bledny adres linku');
+        }
         }
     }
 
@@ -177,7 +180,6 @@ class Product implements JsonSerializable {
             return $pictures;
         }
     }
-
 
     public static function loadProductFromDb(mysqli $connection, $id = null, $categoryId = null) {
         if (is_null($id) && is_null($categoryId)) {
@@ -243,17 +245,11 @@ class Product implements JsonSerializable {
         return $this->description;
     }
 
-    function getKeyInTheBasket() {
-        return $this->getKeyInTheBasket;
-    }
 
     function getCategoryId() {
         return $this->categoryId;
     }
 
-    function getOrderedQuantity() {
-        return $this->orderedQuantity;
-    }
 
     function getStock() {
         return $this->stock;
@@ -267,10 +263,6 @@ class Product implements JsonSerializable {
         $this->productId = $productId;
     }
 
-    function setKeyInTheBasket($keyInTheBasket) {
-        $this->keyInTheBasket = $keyInTheBasket;
-    }
-
     function setCategoryId($categoryId) {
         $this->categoryId = $categoryId;
     }
@@ -280,72 +272,46 @@ class Product implements JsonSerializable {
             $this->name = $name;
         }
 //        else {
-//            throw new InvalidArgumentException('Bledna nazwa');
+//            throw new InvalidLengthException('Bledna nazwa');
 //        }
     }
 
-    function getQuantity() {
-        return $this->quantity;
-    }
 
     function setPrice($price) {
         if ($price >= 0) {
             $this->price = $price;
-        } else {
-            throw new InvalidArgumentException('Cena nie może być liczbą ujemną');
-        }
+        } 
+//        else {
+//            throw new InvalidArgumentException('Cena nie może być liczbą ujemną');
+//        }
+        
     }
-
     function setDescription($description) {
         if (strlen(trim($description)) > 0) {
             $this->description = $description;
         }
 //        else {
-//            throw new InvalidArgumentException('Bledny opis');
+//            throw new InvalidLengthException('Bledny opis');
 //        }
     }
 
     function setStock($stock) {
         if ($stock >= 0) {
             $this->stock = $stock;
-        } else {
-            throw new InvalidArgumentException('Stany nie mogą być poniżej zera!!!');
         }
+//        else {
+//            throw new InvalidArgumentException('Stany nie mogą być poniżej zera!!!');
+//        }
     }
 
     function setQuantity($quantity) {
         if ($quantity >= 0) {
             $this->quantity = $quantity;
-        } else {
-            throw new InvalidArgumentException('Liczba zamówionych produktów nie może być ujemna');
         }
+//        else {
+//            throw new InvalidArgumentException('Liczba zamówionych produktów nie może być ujemna');
+//        }
     }
-
-    function rewind() {
-        var_dump(__METHOD__);
-        $this->position = 0;
-    }
-
-    function current() {
-        var_dump(__METHOD__);
-        return $this->users[$this->position];
-    }
-
-    function key() {
-        var_dump(__METHOD__);
-        return $this->position;
-    }
-
-    function next() {
-        var_dump(__METHOD__);
-        ++$this->position;
-    }
-
-    function valid() {
-        var_dump(__METHOD__);
-        return isset($this->users[$this->position]);
-    }
-
 }
 
 /*

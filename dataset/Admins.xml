@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dataset>
+
+<Admin
+    id="3"
+    email="email@email.com3"
+    hashed_password="$2y$10$mJFJfJqddyBtW62GQYKl..Dwq25ySlYkLP/MVVoweuA2f5wP7ewyC"
+/>
+
+<Admin
+    id="2"
+    email="email@email.com2"
+    hashed_password="$2y$10$GR5u8V6MMPGtLhYY5o0ZdOBjkNKtQHmG/v5YUAVjA4xYyJ4QzMqRW"
+/>
+
+<Admin
+    id="4"
+    email="email@email.com1"
+    hashed_password="$2y$10$8Sf6oJk/pO6Xeca9l.OYveuTN863t9LRr.p4fj1h09Dzk20ljy2Ui"
+/>
+
+</dataset>

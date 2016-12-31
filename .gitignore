@@ -2,3 +2,4 @@
 composer.lock
 vendor/
 /src/Db.php
+/test/tst.php

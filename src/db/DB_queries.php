@@ -25,7 +25,7 @@ address VARCHAR (255) NOT NULL
 )
 
 
-CREATE TABLE Picture2s (
+CREATE TABLE Pictures (
 picture_id INT AUTO_INCREMENT,
 picture VARCHAR(255) NOT NULL, 
 product_id INT,
@@ -42,7 +42,8 @@ CREATE TABLE Massages (
 massage_id INT AUTO_INCREMENT,
 massage VARCHAR(255) NOT NULL,
 user_id INT,
-user_name VARCHAR(255) NOT NULL,
+title text,
+status INT
 PRIMARY KEY(massage_id),
 FOREIGN KEY (user_id)
 REFERENCES Users(id)
@@ -85,7 +86,7 @@ CREATE TABLE Categories(
 category_id INT AUTO_INCREMENT,
 category_name VARCHAR (200) NOT NULL UNIQUE,
 PRIMARY KEY (category_id),
-FOREIGN KEY (id)
+FOREIGN KEY (category_id)
 REFERENCES Products(id)
 );
 
@@ -111,6 +112,49 @@ PRIMARY KEY(id)
 
 
 
+<?php
 
+
+//CREATE DATABASE FirstShop
+
+
+//CREATE TABLE Products (
+//        id INT PRIMARY KEY AUTO_INCREMENT,
+//        category VARCHAR(200) NOT NULL,
+//        name VARCHAR(200) NOT NULL,
+//        description TEXT,
+//        price DECIMAL(8,2),
+//        stock int
+//        
+//        )
+
+
+//CREATE DATABASE Users (
+//        id INT PRIMARY KEY AUTO_INCREMENT,
+//        name VARCHAR(200) NOT NULL,
+//        surname VARCHAR(200) NOT NULL,
+//        email VARCHAR(200) NOT NULL UNIQUE,
+//        password varchar(255)  NOT NULL,
+//        address VARCHAR(255) NOT NULL,
+//        )
+        
+
+//CREATE TABLE Pictures (
+//picture_id INT  AUTO_INCREMENT,
+//picture_link TEXT NOT NULL, 
+//product_id INT,
+//PRIMARY KEY(picture_id),
+//FOREIGN KEY(product_id)
+//REFERENCES Products(id)
+//ON DELETE CASCADE
+//)
+//        
+        
+//        SELECT * FROM Orders
+//JOIN Orders_items ON Orders.order_id=Orders_items.order_id;
+//JOIN Products ON Products.id=Orders_items.product_id;
+//        
+
+        
 
 */

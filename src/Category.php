@@ -79,10 +79,9 @@ class Category {
         }
         return $categories;
     }
-    
-    
-    public static function getCategoryById(mysqli $connection, $categoryId){
-        $result = $connection->query("SELECT * FROM Categories WHERE category_id = '" . 
+
+    public static function getCategoryById(mysqli $connection, $categoryId) {
+        $result = $connection->query("SELECT * FROM Categories WHERE category_id = '" .
                 $connection->real_escape_string($categoryId) . "'");
         if ($result == true && $result->num_rows == 1) {
             $row = $result->fetch_assoc();
@@ -92,8 +91,8 @@ class Category {
             return $category;
         }
     }
-            
-            function getCategoryName() {
+
+    function getCategoryName() {
         return $this->categoryName;
     }
 
@@ -106,7 +105,7 @@ class Category {
     }
 
     function setCategoryId($categoryId) {
-        $this->categorId = $categoryId;
+        $this->categoryId = $categoryId;
     }
 
 }

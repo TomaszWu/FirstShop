@@ -10,16 +10,14 @@ class User implements JsonSerializable {
     private $email;
     private $hashedPassword;
     private $address;
-    private $basket;
 
-    public function __construct($userId = -1, $name = null, $surname = null, $email = null, $hashedPassword = null, $address = null, $basket = null) {
+    public function __construct($userId = -1, $name = null, $surname = null, $email = null, $hashedPassword = null, $address = null) {
         $this->userId = $userId;
         $this->setName($name);
         $this->setSurname($surname);
         $this->setEmail($email);
         $this->setHashedPassword($hashedPassword);
         $this->address = ($address);
-        $this->basket = [];
     }
     
     public function jsonSerialize() {
@@ -32,7 +30,6 @@ class User implements JsonSerializable {
             'description' => $this->description,
             'setHashedPassword' => $this->hashedPassword,
             'address' => $this->address,
-            'basket' => $this->basket
         ];
     }
 

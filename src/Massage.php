@@ -77,24 +77,27 @@ class Massage implements JsonSerializable {
         return $massagesList;
     }
 
-    public static function loadMassagesByStatus(mysqli $connection, $status, $userId) {
-        $result = $connection->query("SELECT * FROM Massages WHERE status='" . 
-                intval($status) . "' AND user_id = '" . intval($userId) . "'");
-        $massagesList = [];
-
-        if ($result && $result->num_rows > 0) {
-            foreach ($result as $row) {
-                $dbMassage = new Massage();
-                $dbMassage->id = $row['massage_id'];
-                $dbMassage->title = $row['title'];
-                $dbMassage->text = $row['massage'];
-                $dbMassage->user_id = $row['user_id'];
-                $dbMassage->status = $row['status'];
-                $massagesList[] = json_encode($dbMassage);
-            }
-        }
-        return $massagesList;
-    }
+    
+//    Być może ta metoda jest do wykasowania:) chyba nic nie robi ;) 
+//    
+//    public static function loadMassagesByStatus(mysqli $connection, $status, $userId) {
+//        $result = $connection->query("SELECT * FROM Massages WHERE status='" . 
+//                intval($status) . "' AND user_id = '" . intval($userId) . "'");
+//        $massagesList = [];
+//
+//        if ($result && $result->num_rows > 0) {
+//            foreach ($result as $row) {
+//                $dbMassage = new Massage();
+//                $dbMassage->id = $row['massage_id'];
+//                $dbMassage->title = $row['title'];
+//                $dbMassage->text = $row['massage'];
+//                $dbMassage->user_id = $row['user_id'];
+//                $dbMassage->status = $row['status'];
+//                $massagesList[] = json_encode($dbMassage);
+//            }
+//        }
+//        return $massagesList;
+//    }
 
     function getId() {
         return $this->id;

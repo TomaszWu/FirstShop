@@ -6,12 +6,12 @@ class Admin {
 
     private $id;
     private $email;
-    private $hashedPassword;
+    private $password;
 
-    private function __construct($id = -1, $email = null, $hashedPassword = null) {
+    public function __construct($id = -1, $email = null, $password = null) {
         $this->id = $id;
         $this->setEmail($email);
-        $this->setHashedPassword($hashedPassword);
+        $this->setPassword($password);
     }
 
     static public function loginAdmin(mysqli $connection, $email, $password) {
@@ -30,9 +30,9 @@ class Admin {
         if ($res && $res->num_rows == 1) {
             $row = $res->fetch_assoc();
             $admin = new Admin();
-            $admin->setId($row['id']);
+            $admin->setId((int)$row['id']);
             $admin->setEmail($row['email']);
-            $admin->hashedPassword = $row['hashed_password'];
+            $admin->setPassword($row['hashed_password'], false);
             return $admin;
         }
         return null;
@@ -50,16 +50,23 @@ class Admin {
         return $this->email;
     }
 
-    function getHashedPassword() {
-        return $this->hashedPassword;
+    function password() {
+        return $this->password;
     }
 
     function setEmail($email) {
         $this->email = $email;
     }
 
-    function setHashedPassword($hashedPassword) {
-        $this->hashedPassword = $hashedPassword;
+    
+    public function setPassword($password, $hashPassword = true) {
+        if (is_string($password)) {
+            if ($hashPassword) {
+                $this->password = password_hash($password, PASSWORD_DEFAULT);
+            } else {
+                $this->password = $password;
+            }
+        }
     }
 
 }

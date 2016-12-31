@@ -4,27 +4,33 @@
     
     <Products
         id="1"
+        category="1"
         name="pralka"
         description="nowy model turbo2000"
-        price="999,99"
+        price="999.9"
         stock="6"
     />
     
     <Products
         id="2"
+        category="1"
         name="TV"
         description="Sharp Extra"
-        price="1999,99"
+        price="1999.99"
         stock="7"
     />
     
     <Products
         id="3"
+        category="3"
         name="BMW"
         description="nowy model turbo2000"
-        price="5999,99"
+        price="5999.99"
         stock="1"
     />
+    
+    
+ 
     
     
     

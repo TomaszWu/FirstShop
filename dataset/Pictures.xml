@@ -2,10 +2,18 @@
 
 
 <dataset>
-    <Pictures
-        id="1"
     
+   <Pictures
+        pictureId = "1"
+        picture = "Pictures/1/29.jpg"
+        productId = "1"
+    />
     
+     <Pictures
+        pictureId = "1"
+        picture = "Pictures/2/30_3.jpg"
+        productId = "2"
+    />
     
     
 </dataset>

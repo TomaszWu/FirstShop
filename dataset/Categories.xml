@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<dataset>
+
+<Categories
+    category_id="1"
+    category_name="category1"
+/>
+
+<Categories
+    category_id="2"
+    category_name="category2"
+/>
+
+<Categories
+    category_id="3"
+    category_name="category3"
+/>
+
+</dataset>
