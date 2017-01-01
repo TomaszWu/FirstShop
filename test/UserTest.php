@@ -36,23 +36,35 @@ class UserTest extends PHPUnit_Extensions_Database_TestCase {
     }
 
     public function testIfLoginReturnsIdWithCorrectParams() {
+        
+        $user = new User((string)1);
+        $user->setEmail( 'testowy@rmail.com');
+        $user->setAddress('testowyadres');
+        $user->setSurname('testsurname');
+        $user->setName('testname');
+        $user->setHashedPassword('$2y$10$gGcjncqnXJKVMkJRRLbEO.j8fA3Q1q2U9hH3oXd6AmhojlJlU4ksm', false);
 //        logowanie będzie statyczne
-        $this->assertEquals(1, User::login(self::$connection, 'testowy@rmail.com', 'testoweaslo'));
+        $this->assertEquals($user, User::login(self::$connection, 'testowy@rmail.com', 'testowy@rmail.com'));
     }
 
     public function testIfGetUserByEmailReturnCorrectUser() {
-        $user = new User(2, 'annabe@op.com');
-        $user->setPassword('$2y$10$eNXbN9zbEi.qBzafH9afBOG7M1lQlw05ZhJy8DCZGhejaAtmoLXrK', false);
-        $userFromDB = User::getUserByEmail(self::$connection, 'annabe@op.com');
-
+        $user = new User(1, 'testowy@rmail.com');
+        $user->setHashedPassword('$2y$10$gGcjncqnXJKVMkJRRLbEO.j8fA3Q1q2U9hH3oXd6AmhojlJlU4ksm', false);
+        $userFromDB = User::getUserByEmail(self::$connection, 'testowy@rmail.com');
         $this->assertEquals($user, $userFromDB);
     }
     
-//    public function testIfUserIsCreatedProperly(){
-//        $userToTest = new User('1', 'testname', 'testsurname' , 'testowy@rmail.com', '$2y$10$tSMHHuzxB4mmEHow7kjy4uq8toS3PA6Ey55PQstVp9Vu7PhEtBIpS',  'testowyadres');
-//        $userFromDB = User::loadUsersFromDB(self::$connection, 1);
-//        $this->assertEquals($userToTest, $userFromDB[0]);
-//    }
+    public function testIfIsPossibleToLoadUserByEmail() {
+        $user = new User((string)1);
+        $user->setEmail( 'testowy@rmail.com');
+        $user->setAddress('testowyadres');
+        $user->setSurname('testsurname');
+        $user->setName('testname');
+        $user->setHashedPassword('$2y$10$gGcjncqnXJKVMkJRRLbEO.j8fA3Q1q2U9hH3oXd6AmhojlJlU4ksm', false);
+        
+        $userFromDB = User::loadByEmail(self::$connection, 'testowy@rmail.com');
+        $this->assertEquals($user, $userFromDB);
+    }
     
 
 }

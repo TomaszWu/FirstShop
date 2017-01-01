@@ -77,9 +77,7 @@ product_id int NOT NULL,
 order_id int  NOT NULL,
 PRIMARY KEY(id),
 FOREIGN KEY(product_id) REFERENCES Products(id),
-FOREIGN KEY (order_id) REFERENCES Orders(order_id)
-
-
+FOREIGN KEY (order_id) REFERENCES Orders(id)
 )
 
 CREATE TABLE Categories(

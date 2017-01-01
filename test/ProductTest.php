@@ -42,14 +42,7 @@ class ProductTest extends PHPUnit_Extensions_Database_TestCase {
         $productToTest = new Product;
         $productToTest->setPrice(-5);
     }
-
-    /**
-     * @expectedException InvalidArgumentException
-     */
-    public function testIfThrowExceptionWhenSetStockIsLessThenZero() {
-        $productToTest = new Product;
-        $productToTest->setPrice(-5);
-    }
+    
 
     /**
      * @expectedException InvalidArgumentException
@@ -57,44 +50,119 @@ class ProductTest extends PHPUnit_Extensions_Database_TestCase {
     public function testIfItIsPossibleToBuyProductWhichIsOutOfStock() {
         $productToTest = new Product;
         $productToTest->setStock(2);
-        $productToTest->buyAProduct(3);
+        $productToTest->buyAProduct(self::$connection, 3);
     }
-
-//    /**
-//     * @expectedException InvalidArgumentException
-//     */
-//    public function testIfItIsPossibleToGiveTheWrongDescriptionToTheProduct() {
-//        $productToTest = new Product;
-//        $productToTest->setDescription('');
-//    }
-//
-//    /**
-//     * @expectedException InvalidArgumentException
-//     */
-//    public function testIfItIsPossibleToGiveTheWrongNameToTheProduct() {
-//        $productToTest = new Product;
-//        $productToTest->setName('dsa');
-//    }
 
     /**
      * @expectedException InvalidArgumentException
      */
-    public function testIfThrowExceptionWhenWhenTheWrongLinkIsPassed() {
-        $productToTest = new Product;
-        $productToTest->addAPictureToTheDB(self::$connection, 'WRONG URL');
+    public function testIfItIsPossibleToGivePriceLowerThanZero() {
+        $productFromDB = Product::loadProductFromDb(self::$connection, 1)[0];
+        $productFromDB->changeProductPrice(self::$connection, -1);
     }
+    
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testIfItIsPossibleToGiveEptyDescription() {
+        $productFromDB = Product::loadProductFromDb(self::$connection, 1)[0];
+        $productFromDB->changeProductDescription(self::$connection, '');
+    }
+    
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testIfItIsPossibleToGiveStockLowerThanZero() {
+        $productFromDB = Product::loadProductFromDb(self::$connection, 1)[0];
+        $productFromDB->changeProductStock(self::$connection, -1);
+    }
+    
 
-    public function testIfForParticularPictureProperArrialWithPicturesIsReceived() {
-        $productToTest = new Product();
-        $productToTest->setName('test');
-        $productToTest->setDescription('test2');
-        $productToTest->setPrice(5);
-        $productToTest->setStock(10);
-        $productToTest->addAProductToTheDB(self::$connection);
-        $id = $productToTest->getId();
-        $test1 = $productToTest->addAPictureToTheDB(self::$connection, 'http://www.oleole.pl/foto/2/8992910192/820cc0e9f985b10407fef5709ae55b4f/8992910192_6.jpg');
-        $test2 = $productToTest->getAllPcituresOfTheItem(self::$connection, $id);
-        $this->assertInternalType('array', $productToTest->getAllPcituresOfTheItem(self::$connection, $id));
+    public function testIfProductAddedToTheDbIsCorrenct() {
+        $product1 = new Product((string) 1);
+        $product1->setCategoryId((string) 1);
+        $product1->setName('pralka');
+        $product1->setDescription('nowy model turbo2000');
+        $product1->setPrice((string) 999.99);
+        $product1->setStock((string) 6);
+        $product1->setPictures(null);
+        
+
+//        $product2 = new Product();
+//        $product2->setProductId((string)2);
+//        $product2->setCategoryId(1);
+//        $product2->setName('TV');
+//        $product2->setDescription('Sharp Extra');
+//        $product2->setPrice((string)1999.99);
+//        $product2->setStock((string)7);
+//        $product2->setPictures(null);
+//        $product1->addAProductToTheDB(self::$connection);
+        $productFromDB = Product::loadProductFromDb(self::$connection, 1)[0];
+        $this->assertEquals($product1, $productFromDB);
     }
+    
+    
+    public function testIfIsPossibleToDeleteItem() {
+        
+        
+        $product1 = (Product::loadProductFromDb(self::$connection, 3)[0]);
+        $product1->deleteTheItem(self::$connection);
+        $deletedItem = Product::loadProductFromDb(self::$connection, 3);
+        $this->assertEmpty($deletedItem);
+    }
+    
+    public function testIfStockChangesWhenItemIsBought() {
+        $productBeforeBuying = Product::loadProductFromDb(self::$connection, 2)[0];
+        $stockBeforeBuying = $productBeforeBuying->getStock();
+        $productBeforeBuying->buyAProduct(self::$connection, 2);
+        $productfterBuying = Product::loadProductFromDb(self::$connection, 2)[0];
+        $stockAfterBuying = $productfterBuying->getStock();
+        $this->assertEquals($stockBeforeBuying, $stockAfterBuying + 2);
+    }
+    
+    /**
+     * @expectedException InvalidArgumentException
+     */
+    public function testIfThrowAnInvalidExceptionWhenStockIsToSmallToBuyNeededQuantity() {
+        $productBeforeBuying = Product::loadProductFromDb(self::$connection, 3)[0];
+        $stockBeforeBuying = $productBeforeBuying->getStock();
+        $productBeforeBuying->buyAProduct(self::$connection, 2);
+        $productfterBuying = Product::loadProductFromDb(self::$connection, 10)[0];
+        $stockAfterBuying = $productfterBuying->getStock();
+        $this->assertEquals($stockBeforeBuying, $stockAfterBuying + 3);
+    }
+    
+    public function testIfIsPossibleToLoadProductByCategory() {
+        
+        $product1 = new Product((string)1);
+        $product1->setCategoryId((string)1);
+        $product1->setName('pralka');
+        $product1->setDescription('nowy model turbo2000');
+        $product1->setPrice((string)999.99);
+        $product1->setStock((string)6);
+        
+        // zdjęcia są nulle. Tutaj jest źle zaprogramowana ta klasa. Zdjęcia powinny
+        //być dodawane jako oddzielne obiety a nie przechowywane w  tablicy
+        // przypisanej do tablicy. Ten nie popełnia błędów kto nic nnie robic ;)
+        $product1->setPictures(null);
+        
+        $product2 = new Product((string)2);
+        $product2->setCategoryId((string)1);
+        $product2->setName('TV');
+        $product2->setDescription('Sharp Extra');
+        $product2->setPrice((string)1999.99);
+        $product2->setStock((string)7);
+        $product2->setPictures(null);
+        
+        $productsToCompare[] = $product1;
+        $productsToCompare[] = $product2;
+                
+        $productsFromSecondCategory = Product::loadProductFromDb(self::$connection, 'null', 1);
+        $this->assertEquals($productsToCompare, $productsFromSecondCategory);
+        
+        
+    }
+    
+    
 
 }

@@ -59,7 +59,7 @@ class CategoryTest extends PHPUnit_Extensions_Database_TestCase {
     public function testIfDeletedCategoryIsInFactDeleted() {
         $category1 = new Category(1, 'category1');
         $category1->addNewCategory(self::$connection);
-        $category1->deleteCategory(self::$connection, 1);
+        Category::deleteCategory(self::$connection, 1);
         $deletedCategory = Category::getCategoryById(self::$connection, 1);
         $this->assertNull($deletedCategory);
     }

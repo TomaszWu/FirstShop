@@ -81,23 +81,6 @@ class User implements JsonSerializable {
         return null;
     }
 
-    public function addTheItemToTheBasket($itemId, $price = null, $quantity = null) {
-        if (!isset($_COOKIE['basket' . $this->userId])) {
-            $this->basket[] = ['itemId' => $itemId,
-                'itemQuantity' => $quantity,
-                'itemPrice' => $price];
-            setcookie('basket' . $this->userId, serialize($this->basket), time() + 900);
-        } else {
-            $previousBasket = unserialize($_COOKIE['basket' . $this->userId]);
-            $previousBasket[] = ['itemId' => $itemId,
-                'itemQuantity' => $quantity,
-                'itemPrice' => $price];
-            $this->basket = $previousBasket;
-            setcookie('basket' . $this->userId, serialize($this->basket), time() + 900);
-        }
-
-        return $this->basket;
-    }
     
     public function addCookiesToTheBasket($cookie) {
         $this->basket[] = $cookie;
@@ -236,8 +219,10 @@ class User implements JsonSerializable {
     public function setEmail($email) {
         if (is_string($email) && strlen(trim($email)) > 5) {
             $this->email = trim($email);
-        }
-        return $this;
+        } 
+//        else {
+//            throw new InvalidArgumentException('Stany nie mogą być poniżej zera!!!');
+//        }
     }
 
 //    public function setPassword($password) {
@@ -271,7 +256,7 @@ class User implements JsonSerializable {
         if ($res->num_rows == 1) {
             $row = $res->fetch_assoc();
             $user = new User((int) $row['id'], $row['email']);
-            $user->setPassword($row['password'], false);
+            $user->setHashedPassword($row['hashed_password'], false);
             return $user;
         }
     }

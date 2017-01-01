@@ -16,7 +16,7 @@ class Admin {
 
     static public function loginAdmin(mysqli $connection, $email, $password) {
         $admin = self::loadByEmail($connection, $email);
-        if ($admin && password_verify($password, $admin->hashedPassword)) {
+        if ($admin && password_verify($password, $admin->password)) {
             return $admin;
         } else {
             return false;
