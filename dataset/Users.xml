@@ -2,37 +2,34 @@
 
 
 <dataset>
-    <!-- nazwa tabeli Users -->
     
     <Users
         id="1"
-        email="testowy@rmail.com"
-        password="$2y$10$tSMHHuzxB4mmEHow7kjy4uq8toS3PA6Ey55PQstVp9Vu7PhEtBIpS"
         name="testname"
         surname="testsurname"
+        email="testowy@rmail.com"
+        hashed_password="$2y$10$gGcjncqnXJKVMkJRRLbEO.j8fA3Q1q2U9hH3oXd6AmhojlJlU4ksm"
         address="testowyadres"
     />
-    <!-- testoweaslo -->
     
     <Users
         id="2"
-        email="annabe@op.com"
-        password="$2y$10$eNXbN9zbEi.qBzafH9afBOG7M1lQlw05ZhJy8DCZGhejaAtmoLXrK"
-        name="anna"
         surname="annowska"
         address="adresAnny"
+        email="annabe@op.com"
+        hashed_password="$2y$10$IkWqAAZKiWRjCFFoYe3j2u0fWGUimXNOGuZxTjMUpNH3Rmn9YnnBq"
+        name="anna"
+        
     />
-    <!-- hasloAnny -->
     
     <Users
         id="3"
-        email="Adam@op.com"
-        password="$2y$10$nyVVSLeHm6yVd9ZvDcWw0.acjvOqbjxxVAjuIfVlMlUcVjG4A4Bse"
-        name="adam"
         surname="adamski"
         address="adresAdam"
+        email="Adam@op.com"
+        hashed_password="$2y$10$JiARKz8ndORrUFzViVGiv.KzL7s4843ZcEUB2Zkzb2PrPd5rMlJIW"
+        name="adam"
     />
-    <!-- hasloAdama -->
         
 
 

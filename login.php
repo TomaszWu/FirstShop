@@ -4,7 +4,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 require_once __DIR__ . '/src/Db.php';
 $conn = DB::connect();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_POST['email']) && strlen(trim($_POST['email'])) > 4 && 
+    if (isset($_POST['email']) && strlen(trim($_POST['email'])) > 4 &&
             isset($_POST['password']) && strlen(trim($_POST['password'])) > 5) {
 
         $email = trim($_POST['email']);
@@ -33,19 +33,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         header('Location: register.php');
     }
 }
-
-//$conn->close();
-//$conn = null;
 ?>
 
 
 <html>
     <head> 
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+        <?php include('includes/header.php'); ?>
         <style>
 
             .Absolute-Center {

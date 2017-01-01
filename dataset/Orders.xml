@@ -4,25 +4,42 @@
     <Orders
         id="1"
         user_id="1"
-        order_status="2"
-        product_quantity = "2"
-        order_id = "22"
+        order_status="0"
+        product_quantity = "1"
         
     />
     <Orders
         id="2"
         user_id="2"
-        order_status="2"
-        product_quantity = "23"
-        order_id = "23"
+        order_status="1"
+        product_quantity = "2"
+        order_id = "2"
     />
     <Orders
         id="3"
         user_id="3"
         order_status="2"
-        product_quantity = "12"
-        order_id = "24"
+        product_quantity = "3"
+        order_id = "2"
     />
+    
+    <Orders
+        id="4"
+        user_id="1"
+        order_status="0"
+        product_quantity = "1"
+        
+    />
+    
+    <Orders
+        id="5"
+        user_id="2"
+        order_status="0"
+        product_quantity = "2"
+    />
+    
+    
+    
     
     
     

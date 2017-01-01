@@ -6,8 +6,9 @@ $conn = DB::connect();
 $allCategies = Category::getAllCategories($conn);
 ?>
 <!DOCTYPE html>
-<?php include('includes/header.php')
-?>
+<head> 
+    <?php include('includes/header.php'); ?>
+</head>
 <script src="js/index.js"></script>
 <body data-spy="scroll" data-target=".navbar" data-offset="50">
     <?php

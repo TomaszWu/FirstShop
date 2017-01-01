@@ -38,8 +38,7 @@ class Order implements JsonSerializable {
             return false;
         }
     }
-    
-    
+
     //poniższa metoda dodaje pozyjcę do koszyka
     public function addTheItemInTheDB(mysqli $connection, $productId, $userId, $status, $productQuantity) {
         if ($this->id == -1) {
@@ -77,6 +76,7 @@ class Order implements JsonSerializable {
             return false;
         }
     }
+
     public static function changeOrderStatus(mysqli $connection, $orderId, $newStatus) {
         $query = "UPDATE Orders SET order_status = '" . $connection->real_escape_string($newStatus) . "'"
                 . " WHERE order_id = '" . $connection->real_escape_string($orderId) . "'";
@@ -143,8 +143,6 @@ WHERE Orders.user_id = '$userId' AND Orders.order_status = 0 AND Orders.id = '$s
             return false;
         }
     }
-    
-        
 
     public static function loadTheBasket(mysqli $connection, $userId) {
         $query = "SELECT Orders.user_id, Orders.order_status, Orders.id as order_id, 
@@ -279,26 +277,29 @@ WHERE Orders.user_id = '$userId' AND Orders.order_status = 0 AND Orders.id = '$s
 
     function setUserId($userId) {
         if ($userId > 0) {
-        $this->orderId = $orderId;
-        } else {
-            throw new InvalidArgumentException('Nr zamówienia nie może być liczbą ujemną');
+            $this->orderId = $orderId;
         }
+//        else {
+//            throw new InvalidArgumentException('Nr zamówienia nie może być liczbą ujemną');
+//        }
     }
 
     function setStatus($status) {
         if ($status > 0) {
-        $this->orderId = $orderId;
-        } else {
-            throw new InvalidArgumentException('Nr zamówienia nie może być liczbą ujemną');
+            $this->orderId = $orderId;
         }
+//        else {
+//            throw new InvalidArgumentException('Nr zamówienia nie może być liczbą ujemną');
+//        }
     }
 
     function setOrderId($orderId) {
         if ($orderId > 0) {
-        $this->orderId = $orderId;
-        } else {
-            throw new InvalidArgumentException('Nr zamówienia nie może być liczbą ujemną');
+            $this->orderId = $orderId;
         }
+//        else {
+//            throw new InvalidArgumentException('Nr zamówienia nie może być liczbą ujemną');
+//        }
     }
 
     function getId() {

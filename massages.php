@@ -11,13 +11,15 @@ $i = 1;
 ?>
 <!DOCTYPE html>
 <html>
-    <?php include('includes/header.php'); ?>
-    <script src="js/massages.js"></script>
-    <style>
-        body { 
-            padding-top: 65px; 
-        }
-    </style>
+    <head> 
+        <?php include('includes/header.php'); ?>
+        <script src="js/massages.js"></script>
+        <style>
+            body { 
+                padding-top: 65px; 
+            }
+        </style>
+    </head>
     <body data-spy="scroll" data-target=".navbar" data-offset="50">
         <?php
         include('includes/navbarOutsideTheMainPage.php');
@@ -33,11 +35,10 @@ $i = 1;
                     ?><div class="panel panel-default" >
                         <div class="panel-heading">
                             <h4 class="panel-title">
-                                <a  class="showMsg" id="<?php echo $singleMassage->getId() 
-                                        ?>" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php 
-                                        echo $i ?>"><?php echo $singleMassage->getTitle();
-                if (!$singleMassage->getStatus()) { ?> <span class="label label-info pull-right showMsg" id="<?php 
-                echo $singleMassage->getId() ?>">Nowa wiadomość!</span> <?php } ?> </a>
+                                <a  class="showMsg" id="<?php echo $singleMassage->getId()
+                    ?>" data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $i ?>"><?php echo $singleMassage->getTitle();
+                                if (!$singleMassage->getStatus()) {
+                        ?> <span class="label label-info pull-right showMsg" id="<?php echo $singleMassage->getId() ?>">Nowa wiadomość!</span> <?php } ?> </a>
                             </h4>
                         </div>
                         <div id="collapse<?php echo $i ?>" class="panel-collapse collapse">

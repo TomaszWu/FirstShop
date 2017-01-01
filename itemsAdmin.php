@@ -40,7 +40,9 @@ if (isset($_SESSION['adminId'])) {
 ?>
 <!DOCTYPE html>
 <html>
-    <?php include('includes/header.php'); ?>
+    <heade>
+        <?php include('includes/header.php'); ?>
+    </heade>
     <body data-spy="scroll" data-target=".navbar" data-offset="50">
         <?php
         include('includes/navbarOutsideTheMainPage.php');
@@ -108,17 +110,19 @@ if (isset($_SESSION['adminId'])) {
                                 if (isset($_POST['categoryId']) && $_POST['categoryId'] > 0) {
                                     $categoryId = $_POST['categoryId'];
                                     $productsToShow = Category::loadAllProductFromParticularCategory($conn, $categoryId);
-                                    foreach ($productsToShow as $product) {
-                                        ?> 
-                                        <tr> 
+                                    if ($productsToShow) {
+                                        foreach ($productsToShow as $product) {
+                                            ?> 
+                                            <tr> 
+                                                <?php
+                                                ?><td><a href="=?<?php echo $product->getProductId()
+                                                ?>"><?php echo $product->getName()
+                                                ?></a></td><td><?php echo $product->getStock()
+                                                ?> </td><td><a href="productDetails.php?productId=<?php echo $product->getProductId()
+                                                ?>">Zmodyfikuj pozycję</a></td><td><a href="deleteItem.php?idToDelete=<?php echo $product->getProductId() ?>">Skasuj pozycję</a></td>
+                                            </tr>
                                             <?php
-                                            ?><td><a href="=?<?php echo $product->getProductId()
-                                            ?>"><?php echo $product->getName()
-                                            ?></a></td><td><?php echo $product->getStock()
-                                            ?> </td><td><a href="productDetails.php?productId=<?php echo $product->getProductId()
-                                            ?>">Zmodyfikuj pozycję</a></td><td><a href="deleteItem.php?idToDelete=<?php echo $product->getProductId() ?>">Skasuj pozycję</a></td>
-                                        </tr>
-                                        <?php
+                                        }
                                     }
                                 }
                             }

@@ -24,7 +24,9 @@ if (!isset($_SESSION['adminId'])) {
     ?>
     <!DOCTYPE html>
     <html>
-        <?php include('includes/header.php'); ?>
+        <head> 
+            <?php include('includes/header.php'); ?>
+        </head>
         <body data-spy="scroll" data-target=".navbar" data-offset="50">
             <div class="col-sm-2"></div>
             <div class="col-sm-8">
@@ -44,10 +46,9 @@ if (!isset($_SESSION['adminId'])) {
                             <tr>
                                 <td><a href="showCategory.php?id=<?php echo $category->getCategoryId();
                             ?>"><?php echo $category->getCategoryName() ?> 
-                                    </a></td><td><a href="catAdmin.php?id=<?php 
-                                    echo $category->getCategoryId() 
-                           ?>">Skasuj kategorię</a><td><a href="addPhotoForMainPage.php?categoryId=<?php 
-                           echo $category->getCategoryId(); ?>">Dodaj zdjęcie na stonę główną</a></td></td>
+                                    </a></td><td><a href="catAdmin.php?id=<?php
+                                    echo $category->getCategoryId()
+                                    ?>">Skasuj kategorię</a><td><a href="addPhotoForMainPage.php?categoryId=<?php echo $category->getCategoryId(); ?>">Dodaj zdjęcie na stonę główną</a></td></td>
                             </tr>
                         <?php } ?> 
                     </tbody>

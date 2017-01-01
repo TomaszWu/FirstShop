@@ -13,9 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 }
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    var_dump($_POST);
     if (isset($_POST['productId']) && isset($_POST['price'])) {
-//        $productId = $_SESSION['productId'];
         $productId = $_SESSION['productId'];
         $price = $_POST['price'];
         $userId = unserialize($_SESSION['userId']);
@@ -78,14 +76,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!DOCTYPE html>
 <html>
 
-    <?php include('includes/header.php'); ?>
-    <style>
-        body { 
-            padding-top: 65px; 
-        }
+    <head> 
+        <?php include('includes/header.php'); ?>
+
+        <style>
+            body { 
+                padding-top: 65px; 
+            }
 
 
-    </style>
+        </style>
+    </head>
     <body data-spy="scroll" data-target=".navbar" data-offset="50">
 
         <?php

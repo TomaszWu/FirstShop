@@ -21,14 +21,16 @@ $allCategies = Category::getAllCategories($conn);
                 <div class="collapse navbar-collapse" id="myNavbar">
                     <ul class="nav navbar-nav">
                         <?php
-                        $i = 0;
+                        $i = 1;
                         foreach ($allCategies as $singleCategory) {
                             // kategoria jest widoczna dopiero, gdy sa da niej wgrane zdjęcia profilowe
                             $categoryId = $singleCategory->getCategoryId();
                             $mainPagePhotos = Picture::getPhotoForMainPageForOneCategory($conn, $categoryId);
                             if ($mainPagePhotos) {
+                                // łamaniec z $i, chodzi o to, że w tablicy kategorie idą od pierwszego indeksu. Sekcje z kolei są 
+                                // numerowane od 1 .
                                 ?>
-                                <li><a href="#section<?php echo $i ?>"><?php echo $allCategies[$i]->getCategoryName() ?></a></li>
+                                <li><a href="#section<?php echo $i ?>"><?php echo $allCategies[$i - 1]->getCategoryName() ?></a></li>
 
                                 <?php
                                 $i++;
@@ -66,17 +68,17 @@ $allCategies = Category::getAllCategories($conn);
                         }
                         if (!isset($_SESSION['userId'])) {
                             ?>
-                            <li><a href="register.php"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                            <li><a href="register.php"><span class="glyphicon glyphicon-user"></span> Zarejestruj się</a></li>
                             <?php
                         }
                         if (!isset($_SESSION['userId'])) {
                             ?>
-                            <li><a href="login.php"><span class="glyphicon glyphicon-log-isn"></span> Login</a></li>
+                            <li><a href="login.php"><span class="glyphicon glyphicon-log-isn"></span> Zaloguj się</a></li>
                             <?php
                         }
                         if (isset($_SESSION['userId'])) {
                             ?>
-                            <li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
+                            <li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span> Wyloguj się</a></li>
                             <?php } ?>
                     </ul>
                 </div>

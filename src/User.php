@@ -110,17 +110,6 @@ class User implements JsonSerializable {
         }
     }
 
-    public function loadAllMassagesSentToTheUser(mysqli $conn) {
-        $query = "SELECT * FROM Massages JOIN Users ON Massages.user_id = Users.id WHERE user_id = '" . $this->id . "'";
-        $massages = [];
-        $result = $conn->query($query);
-        if ($result && $result->num_rows > 0) {
-            foreach ($result as $row) {
-                $massages[] = $row;
-            }
-        }
-        return $massages;
-    }
 
     public function loadAllOrders(mysqli $conn) {
         $query = "SELECT * FROM Users JOIN Orders ON Users.id = Orders.user_id WHERE id ='" . $this->userId . "'";
@@ -220,17 +209,8 @@ class User implements JsonSerializable {
         if (is_string($email) && strlen(trim($email)) > 5) {
             $this->email = trim($email);
         } 
-//        else {
-//            throw new InvalidArgumentException('Stany nie mogą być poniżej zera!!!');
-//        }
     }
 
-//    public function setPassword($password) {
-//        if (is_string($password) && strlen(trim($password)) > 5) {
-//            $this->hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-//        }
-//        return $this; // gdyby toś chciał wywołać kilka seterów ?? oO
-//    }
     public function setHashedPassword($password, $hashPassword = true) {
         if (is_string($password)) {
             if ($hashPassword) {
@@ -240,14 +220,6 @@ class User implements JsonSerializable {
             }
         }
     }
-
-
-//    public function setHashedPassword($password) {
-//        if (is_string($password) && strlen(trim($password)) > 5) {
-//            $this->hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-//        }
-//        return $this; // gdyby toś chciał wywołać kilka seterów ?? oO
-//    }
 
     public static function getUserByEmail(mysqli $connection, $email) {
         //        $email = $connection->real_escape_string($mail); tak też można 

@@ -31,27 +31,35 @@
                             </li>
                         <?php } ?>
                     </ul>
-                    <ul class="nav navbar-nav navbar-right">
+                     <ul class="nav navbar-nav navbar-right">
                         <?php if (isset($_SESSION['userId'])) { ?>
-                            <li><a href="register.php"><span class="glyphicon glyphicon-envelope"></span> Wiadomości  <span  id="massages"></span></a></li>
-                        <?php }
+                        <li><a href="massages.php"><span class="glyphicon glyphicon-envelope"></span> Wiadomości <span  id="massages"></span></a></li>
+                            <?php
+                        }
                         if (isset($_SESSION['userId'])) {
                             ?>
                             <li><a href="basket.php"><span class="glyphicon glyphicon-shopping-cart"></span> Koszyk</a></li>
-                        <?php }
-                        if (!isset($_SESSION['userId'])) {
+                            <?php
+                        }
+                        if (isset($_SESSION['userId'])) {
                             ?>
-                            <li><a href="register.php"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                            <li><a href="orders.php"><span class="glyphicon glyphicon-eye-open"></span> Zamówienia</a></li>
                             <?php
                         }
                         if (!isset($_SESSION['userId'])) {
                             ?>
-                            <li><a href="login.php"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-                            <?php }
-                            if (isset($_SESSION['userId'])) {
-                                ?>
-                            <li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span> Logout</a></li>
-<?php } ?>
+                            <li><a href="register.php"><span class="glyphicon glyphicon-user"></span> Zarejestruj się</a></li>
+                            <?php
+                        }
+                        if (!isset($_SESSION['userId'])) {
+                            ?>
+                            <li><a href="login.php"><span class="glyphicon glyphicon-log-isn"></span> Zaloguj się</a></li>
+                            <?php
+                        }
+                        if (isset($_SESSION['userId'])) {
+                            ?>
+                            <li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span> Wyloguj się</a></li>
+                            <?php } ?>
                     </ul>
                 </div>
 

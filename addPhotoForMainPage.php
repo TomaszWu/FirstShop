@@ -50,7 +50,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <!DOCTYPE html>
 <html>
 
-    <?php include('includes/header.php'); ?>
+    <heade>
+        <?php include('includes/header.php'); ?>
+    </heade>
     <style>
         body { 
             padding-top: 65px; 

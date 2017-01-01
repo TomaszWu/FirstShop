@@ -23,16 +23,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 <!DOCTYPE html>
 <html>
-<?php include('includes/header.php'); ?>
-    <style>
-        body { 
-            padding-top: 65px; 
-        }
+    <head> 
+        <?php include('includes/header.php'); ?>
+        <style>
+            body { 
+                padding-top: 65px; 
+            }
 
 
-    </style>
+        </style>
     <body data-spy="scroll" data-target=".navbar" data-offset="50">
-<?php include('includes/navbarOutsideTheMainPage.php'); ?>
+        <?php include('includes/navbarOutsideTheMainPage.php'); ?>
         <?php
         $categoryId = $_SESSION['category'];
         $products = Product::loadProductFromDb($conn, null, $categoryId);
@@ -53,8 +54,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div class="carousel-inner" role="listbox">
                                     <ol class="carousel-indicators">
                                         <li data-target="#myCarouse<?php echo $productId ?>" data-slide-to="<?php echo $i ?>" class="active"></li>
-        <?php } else {
-            ?>
+                                    <?php } else {
+                                        ?>
                                         <li data-target="#myCarouse<?php echo $productId ?>" data-slide-to="<?php echo $i ?>"></li>
                                         <?php
                                     }
@@ -62,25 +63,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 ?>
                             </ol>
 
-    <?php
-    for ($i = 0; $i < count($pictures); $i ++) {
-        if ($i == 0) {
-            ?>
+                            <?php
+                            for ($i = 0; $i < count($pictures); $i ++) {
+                                if ($i == 0) {
+                                    ?>
                                     <div class="item active ">
                                         <a href="productDetails.php?productId=<?php echo $productId ?>"><img  src="/FirstShop/<?php echo $pictures[$i]; ?>" alt="Chania"></a>
                                         <h3><?php echo $name ?></h3>
                                         <p>Beatiful flowers in Kolymbari, Crete.</p>
                                     </div>
-        <?php } else {
-            ?>
+                                <?php } else {
+                                    ?>
                                     <div class="item ">
                                         <a href="productDetails.php?productId=<?php echo $productId ?>"><img src="/FirstShop/<?php echo $pictures[$i]; ?>" alt="Chania"></a>
                                         <h3><?php echo $name ?></h3>
                                         <!--<p>Beatiful flowers in Kolymbari, Crete.</p>-->
                                     </div>
-            <?php
-        }
-        ?>
+                                    <?php
+                                }
+                                ?>
 
                                 <a class="left carousel-control" href="#myCarouse<?php echo $productId ?>" role="button" data-slide="prev">
                                     <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
@@ -90,7 +91,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
                                     <span class="sr-only">Next</span>
                                 </a>
-    <?php } ?>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>
@@ -111,14 +112,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     </table>
                     <form method="POST" action="">
-                        <?php if(isset($_SESSION['userId'])){ ?>
-                        <input type="submit" class="btn btn-info" name="productId" value="Dodaj do koszyka">
-                        <input type="hidden" class="btn btn-info" name="productId" value="<?php echo $productId ?>">
-                        <input type="hidden" class="btn btn-info" name="price" value="<?php echo $price ?>">
-                        <?php  } else { ?>
-                        <button type="button" class="btn btn-primary disabled"><abbr title="Zaloguj się aby móc kontynuować zakupy">Dodaj do koszyka</abbr></button>
-                        <?php  } ?>
-                        
+                        <?php if (isset($_SESSION['userId'])) { ?>
+                            <input type="submit" class="btn btn-info" name="productId" value="Dodaj do koszyka">
+                            <input type="hidden" class="btn btn-info" name="productId" value="<?php echo $productId ?>">
+                            <input type="hidden" class="btn btn-info" name="price" value="<?php echo $price ?>">
+                        <?php } else { ?>
+                            <button type="button" class="btn btn-primary disabled"><abbr title="Zaloguj się aby móc kontynuować zakupy">Dodaj do koszyka</abbr></button>
+                        <?php } ?>
+
                     </form>
                 </div>
 
@@ -127,5 +128,5 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 
-<?php } ?>
+        <?php } ?>
     </body>
