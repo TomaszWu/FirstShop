@@ -74,18 +74,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                                 <span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
                                 <input class="form-control" type="password" name='password' placeholder="password"/>     
                             </div>
-                            <div class="checkbox">
+<!--                            <div class="checkbox">
                                 <label>
                                     <input type="checkbox"> I agree to the <a href="#">Terms and Conditions</a>
                                 </label>
-                            </div>
+                            </div>-->
                             <div class="form-group">
                                 <input type="submit" class="btn btn-def btn-block" value="zarejestruj">
                             </div>
                     </div>
                     <div class="panel-footer">
                         <div class="form-group text-center">
-                            <a href="#">Forgot Password</a>&nbsp;|&nbsp;<a href="#">Support</a>&nbsp;|&nbsp;<a href="adminLog.php">Admin log</a>
+                            <a href="#">&nbsp;<a href="adminLog.php">Admin log</a>
+                            <!--<a href="#">Forgot Password</a>&nbsp;|&nbsp;<a href="#">Support</a>&nbsp;|&nbsp;<a href="adminLog.php">Admin log</a>-->
                         </div>
                     </div>
 

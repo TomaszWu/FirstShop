@@ -7,7 +7,7 @@ CREATE DATABASE FirstShop
 
 CREATE TABLE Products (
 id INT PRIMARY KEY AUTO_INCREMENT,
-category INT NOT NULL,
+category_id INT NOT NULL,
 name VARCHAR (200) NOT NULL,
 description TEXT,
 price DECIMAL(8,2),
