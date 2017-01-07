@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             <div class="col-sm-6 center-block Absolute-Center is-Responsive">
                 <div class="panel panel-default">
                     <div class="panel-heading"
-                         <h1>Zarejestruj się</h1>     
+                         <h1>Zaloguj się</h1>     
                     </div>
                     <div class="panel-body">
                         <form action="#" method="POST" id="loginForm">

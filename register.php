@@ -4,36 +4,57 @@ require_once __DIR__ . '/src/Db.php';
 $conn = DB::connect();
 $i = 0;
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_POST['name']) && strlen(trim($_POST['name'])) > 0 &&
-            isset($_POST['surname']) && strlen(trim($_POST['surname'])) > 0 &&
-            isset($_POST['email']) && strlen(trim($_POST['email'])) >= 5 &&
-            isset($_POST['password']) && strlen(trim($_POST['password'])) > 5 &&
-            isset($_POST['retyped_password']) && trim($_POST['password']) == trim($_POST['retyped_password']) && isset($_POST['address']) && strlen(trim($_POST['address'])) > 0) {
-        $emailToCheck = $_POST['email'];
-        $query = "SELECT email FROM Users WHERE email = '$emailToCheck'";
-        $checkIfThereIsAProblemWithAnEmail = $conn->query($query);
-        $user = new User();
-        $user->setName(trim($_POST['name']));
-        $user->setSurname(trim($_POST['surname']));
-        $user->setEmail(trim($_POST['email']));
-        $user->setHashedPassword(trim($_POST['password']));
-        $user->setAddress(trim($_POST['address']));
-        if (!filter_var($emailToCheck, FILTER_VALIDATE_EMAIL) === false) {
-            if ($user->saveTheUserToDB($conn)) {
-                echo 'Udało się zarejstrować';
-//                header('Location: index.php');
-            } elseif ($checkIfThereIsAProblemWithAnEmail && $checkIfThereIsAProblemWithAnEmail->num_rows > 0) {
-                echo 'Ten email już istnieje w bazie danych. Prosimy podać nowy.';
-                $i++;
+    if (isset($_POST['name']) && strlen(trim($_POST['name'])) > 0) {
+        if (isset($_POST['surname']) && strlen(trim($_POST['surname'])) > 0) {
+            if (isset($_POST['email']) && strlen(trim($_POST['email'])) >= 5) {
+                if (isset($_POST['password']) && strlen(trim($_POST['password'])) > 5) {
+                    if (isset($_POST['retyped_password']) && trim($_POST['password']) == trim($_POST['retyped_password'])) {
+                        if (isset($_POST['address']) && strlen(trim($_POST['address'])) > 0) {
+                            $emailToCheck = $_POST['email'];
+                            $query = "SELECT email FROM Users WHERE email = '$emailToCheck'";
+                            $checkIfThereIsAProblemWithAnEmail = $conn->query($query);
+                            $user = new User();
+                            $user->setName(trim($_POST['name']));
+                            $user->setSurname(trim($_POST['surname']));
+                            $user->setEmail(trim($_POST['email']));
+                            $user->setHashedPassword(trim($_POST['password']));
+                            $user->setAddress(trim($_POST['address']));
+                            if (!filter_var($emailToCheck, FILTER_VALIDATE_EMAIL) === false) {
+                                if ($user->saveTheUserToDB($conn)) {
+                                    echo 'Udało się zarejstrować';
+                                } elseif ($checkIfThereIsAProblemWithAnEmail && $checkIfThereIsAProblemWithAnEmail->num_rows > 0) {
+                                    echo 'Ten email już istnieje w bazie danych. Prosimy podać nowy.';
+                                    $i++;
+                                } else {
+                                    echo "Blad rejestracji";
+                                    $i++;
+                                }
+                            } else {
+                                echo "$emailToCheck nie jest poprawnym adresem mailowym";
+                                $i++;
+                            }
+                        } else {
+                            $problem = 'wrongAddress';
+                            $i++;
+                        }
+                    } else {
+                        $problem = 'retypePassword';
+                        $i++;
+                    }
+                } else {
+                    $problem = 'passwordToShort';
+                    $i++;
+                }
             } else {
-                echo "Blad rejestracji";
+                $problem = 'emailToShort';
                 $i++;
             }
         } else {
-            echo "$emailToCheck nie jest poprawnym adresem mailowym";
+            $problem = 'problemWithSurname';
             $i++;
         }
     } else {
+        $problem = 'problemWithName';
         $i++;
     }
 }
@@ -65,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="center-block Absolute-Center is-Responsive">
                 <div class="panel panel-default">
                     <div class="panel-heading"
-                         <h1>Zaloguj się</h1>     
+                         <h1>Zarejestruj się</h1>     
                     </div>
                     <div class="panel-body">
                         <form method="POST">
@@ -114,13 +135,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="panel-footer">
                         <a href="login.php">Powrót do rejestracji</a>
                     </div>
-                    <?php if ($i == 1) { ?>
+                    <?php
+                    if ($i > 0) {
+                        ?>
                         <div class="alert alert-danger fade in">
                             <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                             <strong>Uwaga!</strong> Błędne dane formularza!
                         </div>
-                    <?php } ?>
-
+                        <?php
+                        switch ($problem):
+                            case 'retypePassword':
+                                $massage = "Błędnie powtórzone hasło!";
+                                break;
+                            case 'wrongAddress':
+                                $massage = "Zły adres!";
+                                break;
+                            case 'passwordToShort':
+                                $massage = "Zbyt krótkie hasło!";
+                                break;
+                            case 'emailToShort';
+                                $massage = "Zbyt krótki email!";
+                                break;
+                            case 'problemWithSurname':
+                                $massage = "Błędne nazwisko!";
+                                break;
+                            case 'problemWithName':
+                                $massage = "Błędne imię!";
+                                break;
+                        endswitch;
+                        ?>
+                        <div class="alert alert-danger fade in">
+                            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                            <strong><?php echo $massage ?></strong>
+                        </div>
+                        <?php
+                    }
+                    ?>
                 </div>
             </div>
         </div>
