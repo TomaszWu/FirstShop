@@ -1,4 +1,7 @@
 <?php
+namespace src;
+
+
 
 class Picture {
     
@@ -17,7 +20,7 @@ class Picture {
     }
     
     
-    public static function getPhotoForMainPageForOneCategory(mysqli $connection, $categoryId){
+    public static function getPhotoForMainPageForOneCategory(\mysqli $connection, $categoryId){
         $result = $connection->query("SELECT * FROM PicturesForCategory WHERE category_id = '" . 
                 $connection->real_escape_string($categoryId) . "'");
         $picturesForMainPage = [];
