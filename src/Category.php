@@ -1,8 +1,8 @@
 <?php
+namespace src;
 
-require_once __DIR__ . '/../vendor/autoload.php';
-
-class Category {
+class Category 
+{
 
     public $categoryId;
     public $categoryName;
@@ -65,7 +65,7 @@ class Category {
         }
     }
 
-    public static function getAllCategories(mysqli $connection) {
+    public static function getAllCategories( mysqli $connection) {
         $query = "SELECT * FROM Categories ORDER BY category_id";
         $categories = [];
         $result = $connection->query($query);

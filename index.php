@@ -1,8 +1,12 @@
 <?php
 session_start();
+
 require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/src/Db.php';
-$conn = DB::connect();
+
+use src\Category;
+use src\Db;
+use src\Picture;
+$conn = Db::connect();
 $allCategies = Category::getAllCategories($conn);
 ?>
 <!DOCTYPE html>
