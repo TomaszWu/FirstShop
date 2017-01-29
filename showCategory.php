@@ -2,6 +2,7 @@
 session_start();
 require_once __DIR__ . '/vendor/autoload.php';
 use src\Product;
+use src\Order;
 use src\Db;
 $conn = Db::connect();
 

@@ -1,7 +1,7 @@
 <?php
 namespace src;
 
-class Order implements JsonSerializable {
+class Order implements \JsonSerializable {
 
     private $id;
     private $orderId;

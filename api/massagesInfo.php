@@ -2,16 +2,17 @@
 
 session_start();
 require_once __DIR__ . '/../vendor/autoload.php';
-require_once __DIR__ . '/../src/Db.php';
-$conn = DB::connect();
+use src\Db;
+$conn = Db::connect();
 
 header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+    
     $userId = unserialize($_SESSION['userId']);
     if ($userId) {
         $userMassages = Massage::loadMassagesByStatus($conn, 0, $userId);
-    }
+    } 
     echo json_encode($userMassages);
 } elseif ($_SERVER['REQUEST_METHOD'] == 'POST') {
     //zgodnie z rest POST dodaje dane

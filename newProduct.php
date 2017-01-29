@@ -1,7 +1,8 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/src/Db.php';
-$conn = DB::connect();
+use src\Category;
+use src\Db;
+$conn = Db::connect();
 $categories = Category::getAllCategories($conn);
 ?>
 <!DOCTYPE html>

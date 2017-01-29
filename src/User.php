@@ -2,7 +2,7 @@
 namespace src;
 
 
-class User implements JsonSerializable {
+class User implements \JsonSerializable {
 
     private $userId;
     private $name;

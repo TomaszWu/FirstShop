@@ -1,7 +1,11 @@
 <?php
 session_start();
-include(__DIR__ . '/src/Db.php');
+//include(__DIR__ . '/src/Db.php');
 require_once __DIR__ . '/vendor/autoload.php';
+
+use src\Picture;
+use src\Db;
+
 $conn = DB::connect();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $allowedFileTypes = ['image/png', 'image/jpeg', 'image/gif'];

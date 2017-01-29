@@ -1,7 +1,9 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/src/Db.php';
-$conn = DB::connect();
+
+use src\Db;
+
+$conn = Db::connect();
 $i = 0;
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['name']) && strlen(trim($_POST['name'])) > 0) {
@@ -63,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <html>
     <head> 
-        <?php include('includes/header.php'); ?>
+<?php include('includes/header.php'); ?>
         <style>
 
             .Absolute-Center {

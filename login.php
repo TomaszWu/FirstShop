@@ -1,8 +1,10 @@
 <?php
 session_start();
 require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/src/Db.php';
-$conn = DB::connect();
+use src\User;
+use src\Order;
+use src\Db;
+$conn = Db::connect();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['email']) && strlen(trim($_POST['email'])) > 4 &&
             isset($_POST['password']) && strlen(trim($_POST['password'])) > 5) {

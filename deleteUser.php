@@ -1,8 +1,8 @@
 <?php
-require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/src/Db.php';
 session_start();
-$conn = DB::connect();
+require_once __DIR__ . '/vendor/autoload.php';
+use src\Db;
+$conn = Db::connect();
 
 if($_SERVER['REQUEST_METHOD'] == 'GET'){
     if(isset($_GET['userIdToDelete'])){

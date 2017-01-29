@@ -1,7 +1,7 @@
 <?php
 namespace src;
 
-class Massage implements JsonSerializable {
+class Massage implements \JsonSerializable {
 
     private $id;
     private $title;

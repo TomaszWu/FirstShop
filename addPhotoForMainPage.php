@@ -2,9 +2,10 @@
 session_start();
 
 require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/src/Db.php';
-$conn = DB::connect();
-require_once (__DIR__ . '/src/Product.php');
+use src\Picture;
+use src\Category;
+use src\Db;
+$conn = Db::connect();
 
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     if (isset($_GET['categoryId'])) {
