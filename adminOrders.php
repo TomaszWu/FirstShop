@@ -2,9 +2,9 @@
 <?php ?>
 <!DOCTYPE html>
 <html>
-    <heade>
-<?php include('includes/header.php'); ?>
-
+    <head>
+        <?php include('includes/header.php'); ?>
+        <script src="js/adminOrders.js"></script>
         <style>
             body {
                 position: relative;
@@ -22,7 +22,7 @@
             }
             .product .img-responsive {
                 margin: 0 auto;
-            }
+            }chooseStatus
             .item {
 
             }
@@ -54,7 +54,7 @@
                     <button type="button" class="btn btn-primary chooseStatus" id="2">Status 2</button>
                 </div>
                 <div class="col-sm-3 text-center">
-                    <button type="button" class="btn btn-success chooseStatus" id="3">Status 2</button>
+                    <button type="button" class="btn btn-success chooseStatus" id="3">Status 3</button>
                 </div>
             </div>
             <div> 
