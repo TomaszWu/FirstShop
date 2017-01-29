@@ -1,6 +1,5 @@
 <?php
-
-require_once __DIR__ . '/../vendor/autoload.php';
+namespace src;
 
 class Admin {
 
@@ -14,7 +13,7 @@ class Admin {
         $this->setPassword($password);
     }
 
-    static public function loginAdmin(mysqli $connection, $email, $password) {
+    static public function loginAdmin(\mysqli $connection, $email, $password) {
         $admin = self::loadByEmail($connection, $email);
         if ($admin && password_verify($password, $admin->password)) {
             return $admin;
@@ -23,7 +22,7 @@ class Admin {
         }
     }
 
-    static public function loadByEmail(mysqli $connection, $email) {
+    static public function loadByEmail(\mysqli $connection, $email) {
         $query = "SELECT * FROM Admin WHERE email = '" . $connection->real_escape_string($email) . "'";
 
         $res = $connection->query($query);

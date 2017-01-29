@@ -1,6 +1,6 @@
 <?php
+namespace src;
 
-require_once __DIR__ . '/../vendor/autoload.php';
 
 class User implements JsonSerializable {
 
@@ -35,7 +35,7 @@ class User implements JsonSerializable {
 
 //
 
-    public function loadTheBasket(mysqli $connection) {
+    public function loadTheBasket(\mysqli $connection) {
         $userId = $this->userId;
         var_dump($userId);
         $query = "SELECT user_id, order_status, orders_products.order_id, orders_products.product_id, orders_products.product_price, orders_products.product_quantity FROM Orders
@@ -52,7 +52,7 @@ class User implements JsonSerializable {
         return $basket;
     }
     
-    static public function login(mysqli $connection, $email, $password) {
+    static public function login(\mysqli $connection, $email, $password) {
         $user = self::loadByEmail($connection, $email);
         if($user && password_verify($password, $user->hashedPassword)){
             return $user;
@@ -61,7 +61,7 @@ class User implements JsonSerializable {
         }
     }
     
-    static public function loadByEmail(mysqli $connection, $email){
+    static public function loadByEmail(\mysqli $connection, $email){
         $query = "SELECT * FROM Users WHERE email = '".$connection->real_escape_string($email)."'";
         
         $res = $connection->query($query);
@@ -86,7 +86,7 @@ class User implements JsonSerializable {
         $this->basket[] = $cookie;
     }
 
-    public function saveTheUserToDB(mysqli $connection) {
+    public function saveTheUserToDB(\mysqli $connection) {
         if ($this->userId == -1) {
             $query = "INSERT INTO Users (name, surname, email, hashed_password, address) 
                     VALUES ('$this->name', '$this->surname', '$this->email', '$this->hashedPassword', '$this->address') ";
@@ -111,7 +111,7 @@ class User implements JsonSerializable {
     }
 
 
-    public function loadAllOrders(mysqli $conn) {
+    public function loadAllOrders(\mysqli $conn) {
         $query = "SELECT * FROM Users JOIN Orders ON Users.id = Orders.user_id WHERE id ='" . $this->userId . "'";
         $usersOrders = [];
         $result = $conn->query($query);
@@ -123,7 +123,7 @@ class User implements JsonSerializable {
         return $usersOrders;
     }
 
-    public static function loadUsersFromDB(mysqli $connection, $id = null) {
+    public static function loadUsersFromDB(\mysqli $connection, $id = null) {
         if (is_null($id)) {
             $result = $connection->query('SELECT * FROM Users');
         } else {
@@ -147,7 +147,7 @@ class User implements JsonSerializable {
         return $usersList;
     }
     
-    public function deleteUser(mysqli $connection){
+    public function deleteUser(\mysqli $connection){
         $query = "DELETE FROM Users WHERE id = '$this->userId'";
         if ($connection->query($query)) {
             return true;
@@ -221,7 +221,7 @@ class User implements JsonSerializable {
         }
     }
 
-    public static function getUserByEmail(mysqli $connection, $email) {
+    public static function getUserByEmail(\mysqli $connection, $email) {
         //        $email = $connection->real_escape_string($mail); tak też można 
         $query = "SELECT * FROM Users WHERE email ='" . mysqli_real_escape_string($connection, $email) . "'";
         $res = $connection->query($query);

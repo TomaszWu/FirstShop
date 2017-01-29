@@ -2,7 +2,6 @@
 namespace src;
 
 
-
 class Picture {
     
     private $id;

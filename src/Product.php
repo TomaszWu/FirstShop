@@ -1,7 +1,6 @@
 <?php
+namespace src;
 
-
-require_once __DIR__ . '/../vendor/autoload.php';
 
 class Product implements JsonSerializable {
 
@@ -35,7 +34,7 @@ class Product implements JsonSerializable {
         ];
     }
 
-    public function addTheItemInTheDB(mysqli $connection, $userId, $status) {
+    public function addTheItemInTheDB(\mysqli $connection, $userId, $status) {
         if ($this->orderId == -1) {
             $userId = $this->getUserId();
             $query = "INSERT INTO Orders (user_id, order_status)
@@ -57,7 +56,7 @@ class Product implements JsonSerializable {
         }
     }
 
-    public function changeProductPrice(mysqli $connection, $newPrice) {
+    public function changeProductPrice(\mysqli $connection, $newPrice) {
         if ($newPrice > 0) {
             $productId = $this->productId;
             $query = "UPDATE Products SET price = '$newPrice' WHERE id = '$this->productId'";
@@ -69,7 +68,7 @@ class Product implements JsonSerializable {
         }
     }
 
-    public function changeProductDescription(mysqli $connection, $newDescription) {
+    public function changeProductDescription(\mysqli $connection, $newDescription) {
         if (strlen(trim($newDescription)) > 0) {
             $query = "UPDATE Products SET description = '$newDescription' WHERE id = '$this->productId'";
             if ($connection->query($query)) {
@@ -82,7 +81,7 @@ class Product implements JsonSerializable {
         }
     }
 
-    public function changeProductStock(mysqli $connection, $newStock) {
+    public function changeProductStock(\mysqli $connection, $newStock) {
         if ($newStock > 0) {
             $productId = $this->productId;
             $query = "UPDATE Products SET stock = '$newStock' WHERE id = '$this->productId'";
@@ -96,7 +95,7 @@ class Product implements JsonSerializable {
         }
     }
 
-    public function deleteTheItem(mysqli $connection) {
+    public function deleteTheItem(\mysqli $connection) {
         $query = "DELETE FROM Products WHERE id = '$this->productId'";
         if ($connection->query($query)) {
             return true;
@@ -106,7 +105,7 @@ class Product implements JsonSerializable {
     }
     
 
-    public function addAProductToTheDB(mysqli $connection) {
+    public function addAProductToTheDB(\mysqli $connection) {
         if ($this->productId == -1) {
             $query = "INSERT INTO Products (name, description, category_id, price, stock)
                     VALUES ( '$this->name', '$this->description', '$this->categoryId', '$this->price', '$this->stock'
@@ -126,7 +125,7 @@ class Product implements JsonSerializable {
         }
     }
 
-    public function buyAProduct(mysqli $connection, $quantity) {
+    public function buyAProduct(\mysqli $connection, $quantity) {
 
         if ($this->stock - $quantity < 0) {
             throw new InvalidArgumentException('Niestety, produkt nie jest dostępny w podanej ilości');
@@ -142,7 +141,7 @@ class Product implements JsonSerializable {
         }
     }
 
-    public function addAPictureToTheDB(mysqli $connection, $link) {
+    public function addAPictureToTheDB(\mysqli $connection, $link) {
         if (filter_var($link, FILTER_VALIDATE_URL)) {
             $query = "INSERT INTO Pictures (picture_link, product_id) VALUES ('" . $connection->real_escape_string($link) . "', '" . $this->getId() . "')";
             if ($connection->query($query)) {
@@ -155,7 +154,7 @@ class Product implements JsonSerializable {
         }
     }
 
-    public static function getAllPcituresOfTheItem(mysqli $connection, $item_id) {
+    public static function getAllPcituresOfTheItem(\mysqli $connection, $item_id) {
         $query = "SELECT Pictures.picture_link FROM Products JOIN Pictures ON Products.id = Pictures.Product_id WHERE Products.id = '$item_id'";
         $pictures = [];
         $result = $connection->query($query);
@@ -167,7 +166,7 @@ class Product implements JsonSerializable {
         }
     }
 
-    public static function loadProductFromDb(mysqli $connection, $id = null, $categoryId = null) {
+    public static function loadProductFromDb(\mysqli $connection, $id = null, $categoryId = null) {
         if (is_null($id) && is_null($categoryId)) {
             $query = "SELECT * FROM Products LEFT JOIN Pictures ON Products.id = Pictures.Product_id";
         } elseif ($categoryId) {
@@ -295,15 +294,5 @@ class Product implements JsonSerializable {
 
 }
 
-/*
-
-      public $query = "CREATE TABLE Products(
-      id int NOT NULL AUTO_INCREMENT,
-      id int NOT NULL,
-      PRIMARY KEY(id),
-      FOREIGN KEY(image_id),
-      REFERENCES Images(image_id) );";
-
-     */
 
     

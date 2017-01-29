@@ -1,7 +1,5 @@
-
 <?php
-
-require_once __DIR__ . '/../vendor/autoload.php';
+namespace src;
 
 class Order implements JsonSerializable {
 
@@ -30,7 +28,7 @@ class Order implements JsonSerializable {
         ];
     }
 
-    public function changeTheQuantity(mysqli $connection, $quantitiy) {
+    public function changeTheQuantity(\mysqli $connection, $quantitiy) {
         $query = "UPDATE Orders SET product_quantity = '$quantitiy' WHERE id ='$this->id'";
         if ($connection->query($query)) {
             return true;
@@ -40,7 +38,7 @@ class Order implements JsonSerializable {
     }
 
     //poniższa metoda dodaje pozyjcę do koszyka
-    public function addTheItemInTheDB(mysqli $connection, $productId, $userId, $status, $productQuantity) {
+    public function addTheItemInTheDB(\mysqli $connection, $productId, $userId, $status, $productQuantity) {
         if ($this->id == -1) {
             $query = "INSERT INTO Orders (user_id, order_status, product_quantity)
                     VALUES ('$userId', '$status', '$productQuantity')";
@@ -77,7 +75,7 @@ class Order implements JsonSerializable {
         }
     }
 
-    public static function changeOrderStatus(mysqli $connection, $orderId, $newStatus) {
+    public static function changeOrderStatus(\mysqli $connection, $orderId, $newStatus) {
         $query = "UPDATE Orders SET order_status = '" . $connection->real_escape_string($newStatus) . "'"
                 . " WHERE order_id = '" . $connection->real_escape_string($orderId) . "'";
         if ($connection->query($query)) {
@@ -87,7 +85,7 @@ class Order implements JsonSerializable {
         }
     }
 
-    public function manageTheOrderInTheDB(mysqli $connection, $status) {
+    public function manageTheOrderInTheDB(\mysqli $connection, $status) {
         if ($this->orderId == -1) {
             $userId = $this->getUserId();
             $query = "INSERT INTO Orders (user_id, status)
@@ -117,7 +115,7 @@ class Order implements JsonSerializable {
         }
     }
 
-    public static function confirmTheBasket(mysqli $connection, $order, $userId) {
+    public static function confirmTheBasket(\mysqli $connection, $order, $userId) {
         $result = $connection->query("SELECT * FROM Orders WHERE "
                 . " order_status = 0 and user_id = '$userId' LIMIT 1");
         if ($result && $result->num_rows > 0) {
@@ -144,7 +142,7 @@ WHERE Orders.user_id = '$userId' AND Orders.order_status = 0 AND Orders.id = '$s
         }
     }
 
-    public static function loadTheBasket(mysqli $connection, $userId) {
+    public static function loadTheBasket(\mysqli $connection, $userId) {
         $query = "SELECT Orders.user_id, Orders.order_status, Orders.id as order_id, 
             Products.price as product_price, Orders.product_quantity, 
             Products.id as product_id, Products.stock, Products.name as product_name FROM Orders
@@ -170,7 +168,7 @@ WHERE Orders.user_id = '$userId' AND Orders.order_status = 0 AND Orders.id = '$s
         return $basket;
     }
 
-    static public function loadOrder(mysqli $connection, $userId = null, $orderId = null, $status = null) {
+    static public function loadOrder(\mysqli $connection, $userId = null, $orderId = null, $status = null) {
         if ($orderId) {
             $query = "SELECT Orders.user_id, Orders.order_status, Orders.id, Orders.order_id,
             Products.price as product_price, Orders.product_quantity, 
@@ -225,7 +223,7 @@ WHERE Orders.user_id = '$userId' AND Orders.order_status = 0 AND Orders.id = '$s
         return $loadedOrders;
     }
 
-    static public function loadOrdersByOrderId(mysqli $connection, $orderId) {
+    static public function loadOrdersByOrderId(\mysqli $connection, $orderId) {
         $query = "SELECT Orders.user_id, Orders.order_status, Orders.id, Orders.order_id,
             Products.price as product_price, Orders.product_quantity, 
             Products.id as product_id, Products.stock, Products.name as product_name FROM Orders

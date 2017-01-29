@@ -12,7 +12,7 @@ class Category
         $this->setCategoryName($categoryName);
     }
 
-    public function addNewCategory(mysqli $connection) {
+    public function addNewCategory(\mysqli $connection) {
         $query = "INSERT INTO Categories (category_name) VALUES "
                 . "('" . $connection->real_escape_string($this->categoryName) . "')";
         $result = $connection->query($query);
@@ -23,7 +23,7 @@ class Category
         }
     }
 
-    public static function deleteCategory(mysqli $connection, $categotyId) {
+    public static function deleteCategory(\mysqli $connection, $categotyId) {
         $query = "DELETE FROM Categories WHERE category_id = "
                 . "('" . $connection->real_escape_string($categotyId) . "')";
         $result = $connection->query($query);
@@ -34,7 +34,7 @@ class Category
         }
     }
 
-    public static function loadAllProductFromParticularCategory(mysqli $connection, $categoryId) {
+    public static function loadAllProductFromParticularCategory(\mysqli $connection, $categoryId) {
         $query = "SELECT * FROM Products
                 LEFT JOIN Categories ON Products.category_id = Categories.category_id
                WHERE Categories.category_id = '$categoryId'";
@@ -65,7 +65,7 @@ class Category
         }
     }
 
-    public static function getAllCategories( mysqli $connection) {
+    public static function getAllCategories( \mysqli $connection) {
         $query = "SELECT * FROM Categories ORDER BY category_id";
         $categories = [];
         $result = $connection->query($query);
@@ -80,7 +80,7 @@ class Category
         return $categories;
     }
 
-    public static function getCategoryById(mysqli $connection, $categoryId) {
+    public static function getCategoryById(\mysqli $connection, $categoryId) {
         $result = $connection->query("SELECT * FROM Categories WHERE category_id = '" .
                 $connection->real_escape_string($categoryId) . "'");
         if ($result == true && $result->num_rows == 1) {

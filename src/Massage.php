@@ -1,6 +1,5 @@
 <?php
-
-require_once __DIR__ . '/../vendor/autoload.php';
+namespace src;
 
 class Massage implements JsonSerializable {
 
@@ -18,7 +17,7 @@ class Massage implements JsonSerializable {
         $this->setStatus($status);
     }
 
-    public function addAMassageToDB(mysqli $connection) {
+    public function addAMassageToDB(\mysqli $connection) {
         if ($this->id == -1) {
             $query = "INSERT INTO Massages (title, massage, user_id, status) VALUES ("
                     . "'" . mysqli_real_escape_string($connection, $this->title) .
@@ -45,7 +44,7 @@ class Massage implements JsonSerializable {
         ];
     }
 
-    public function changeTheStatus(mysqli $connection, $status) {
+    public function changeTheStatus(\mysqli $connection, $status) {
         $query = "UPDATE Massages SET Status = '" . mysqli_real_escape_string($connection, $status) . "' WHERE massage_id = '" . intval($this->id) . "'";
 
         if ($connection->query($query)) {
@@ -56,7 +55,7 @@ class Massage implements JsonSerializable {
         }
     }
 
-    public static function loadMassagesFromDB(mysqli $connection, $user_id = null, $msgId = null) {
+    public static function loadMassagesFromDB(\mysqli $connection, $user_id = null, $msgId = null) {
         if ($user_id) {
             $result = $connection->query("SELECT * FROM Massages WHERE user_id='" . intval($user_id) . "' "
                     . " ORDER BY massage_id DESC ");
@@ -82,24 +81,26 @@ class Massage implements JsonSerializable {
     
 //    Być może ta metoda jest do wykasowania:) chyba nic nie robi ;) 
 //    
-//    public static function loadMassagesByStatus(mysqli $connection, $status, $userId) {
-//        $result = $connection->query("SELECT * FROM Massages WHERE status='" . 
-//                intval($status) . "' AND user_id = '" . intval($userId) . "'");
-//        $massagesList = [];
-//
-//        if ($result && $result->num_rows > 0) {
-//            foreach ($result as $row) {
-//                $dbMassage = new Massage();
-//                $dbMassage->id = $row['massage_id'];
-//                $dbMassage->title = $row['title'];
-//                $dbMassage->text = $row['massage'];
-//                $dbMassage->user_id = $row['user_id'];
-//                $dbMassage->status = $row['status'];
-//                $massagesList[] = json_encode($dbMassage);
-//            }
-//        }
-//        return $massagesList;
-//    }
+//   
+ public static function loadMassagesByStatus(\mysqli $connection, $status, $userId) {
+        $result = $connection->query("SELECT * FROM Massages WHERE status='" .
+                $status . "' AND user_id = '" . 
+                $userId . "'");
+        $massagesList = [];
+
+        if ($result && $result->num_rows > 0) {
+            foreach ($result as $row) {
+                $dbMassage = new Massage();
+                $dbMassage->id = $row['massage_id'];
+                $dbMassage->title = $row['title'];
+                $dbMassage->text = $row['massage'];
+                $dbMassage->user_id = $row['user_id'];
+                $dbMassage->status = $row['status'];
+                $massagesList[] = json_encode($dbMassage);
+            }
+        }
+        return $massagesList;
+    }
 
     function getId() {
         return $this->id;
