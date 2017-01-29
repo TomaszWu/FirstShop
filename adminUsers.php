@@ -1,7 +1,9 @@
 <?php
-session_start();
 require_once __DIR__ . '/vendor/autoload.php';
-require_once __DIR__ . '/src/Db.php';
+session_start();
+
+use src\User;
+use src\Order;
 use src\Db;
 $conn = Db::connect();
 if (!isset($_SESSION['adminId'])) {
@@ -91,9 +93,12 @@ if (!isset($_SESSION['adminId'])) {
             }
         }
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+       
             if (isset($_POST['orderId'])) {
+                
                 $orderId = $_POST['orderId'];
                 $userOrders = $_SESSION['userOrders'];
+                  
                 ?>
                 <div class="container">
                     <h2>Szczegóły zamówienia nr <?php echo $orderId ?> </h2>
@@ -110,9 +115,9 @@ if (!isset($_SESSION['adminId'])) {
                             foreach ($userOrders[$orderId] as $key => $singleItem) {
                                 ?> 
                                 <tr>
-                                    <td><?php echo $singleItem->getProducts()['product_name'] ?></td>
-                                    <td><?php echo $singleItem->getProducts()['quantity'] ?></td>
-                                    <td><?php echo $singleItem->getProducts()['price'] ?></td>
+                                    <td><?php echo $singleItem->products['product_name'] ?></td>
+                                    <td><?php echo $singleItem->products['quantity'] ?></td>
+                                    <td><?php echo $singleItem->products['price'] ?></td>
                                 </tr>
                             <?php } ?>
                         <td></td>

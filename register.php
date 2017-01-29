@@ -1,6 +1,6 @@
 <?php
 require_once __DIR__ . '/vendor/autoload.php';
-
+use src\User;
 use src\Db;
 
 $conn = Db::connect();
