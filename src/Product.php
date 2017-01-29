@@ -2,7 +2,7 @@
 namespace src;
 
 
-class Product implements JsonSerializable {
+class Product implements \JsonSerializable {
 
     public $productId;
     public $name;
