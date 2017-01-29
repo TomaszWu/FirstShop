@@ -19,7 +19,7 @@ $(function () {
         
         $.ajax({
             url: 'api/massagesInfo.php',
-            type: 'PUT',
+            type: 'GET',
             data: {msgId: msgId},
             dataType: 'json'
         })

@@ -1,7 +1,9 @@
 <?php
+
 use src\Category;
 use src\Picture;
 use src\Db;
+
 $conn = Db::connect();
 ?>
 
@@ -37,6 +39,19 @@ $conn = Db::connect();
                             }
                         }
                         ?>
+                        <?php if (isset($_SESSION['adminId'])) { ?>
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Panel administratora
+                                    <span class="caret"></span></a>
+                                <ul class="dropdown-menu">
+                                    <li><a href="catAdmin.php">Zarządzanie grupami</a></li>
+                                    <li><a href="itemsAdmin.php">Zarządzanie przedmiotami</a></li>
+                                    <li><a href="adminUsers.php">Zarządzanie użytkownikami</a></li>
+                                    <li><a href="adminOrders.php">Zarządzanie zamówieniami</a></li>
+                                    <li><a href="logout.php">Wyloguj się jako admin</a></li>
+                                </ul>
+                            </li>
+                        <?php } ?>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <?php if (isset($_SESSION['userId'])) { ?>
@@ -66,7 +81,7 @@ $conn = Db::connect();
                         if (isset($_SESSION['userId'])) {
                             ?>
                             <li><a href="logout.php"><span class="glyphicon glyphicon-log-out"></span> Wyloguj się</a></li>
-                            <?php } ?>
+<?php } ?>
                     </ul>
                 </div>
 
