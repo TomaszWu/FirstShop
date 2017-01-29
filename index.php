@@ -1,8 +1,6 @@
-<?php
-session_start();
+<?php session_start();
 
 require_once __DIR__ . '/vendor/autoload.php';
-
 use src\Category;
 use src\Db;
 use src\Picture;
